@@ -13,7 +13,7 @@ public class Cliente {
 		this.nombre = nombre;
 		this.direccion = direccion;
 		this.telefono = telefono;
-		this.credito=0;
+		this.credito = 0;
 	}
 
 	public String getCedula() {
