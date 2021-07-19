@@ -48,4 +48,32 @@ public class MotherBoard extends Componente {
 	public void setConexionesCompatibles(ArrayList<String> conexionesCompatibles) {
 		this.conexionesCompatibles = conexionesCompatibles;
 	}
+	
+	public boolean compatibilidadConBoard(Componente comp) {
+		
+		if(comp instanceof Ram) {
+			if(tipoRam.equalsIgnoreCase(((Ram) comp).getTipoMemoria())) {
+				return true;
+			}else {
+				return false;
+			}
+		}
+		
+		if(comp instanceof MicroProcesador) {
+			if(tipoSocket.equalsIgnoreCase(((MicroProcesador) comp).getTipoSocket())) {
+				return true;
+			}else {
+				return false;
+			}
+		}
+		
+		if(comp instanceof DiscoDuro) {
+			for(String con:conexionesCompatibles) {
+				if(con.equalsIgnoreCase(((DiscoDuro) comp).getTipoConexion())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }
