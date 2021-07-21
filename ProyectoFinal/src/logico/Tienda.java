@@ -9,14 +9,22 @@ public class Tienda {
 		private ArrayList<Cliente> clientes;
 		private ArrayList<Suministrador> suministradores;
 		private ArrayList<OrdenCompra> ordenesCompra;
+		private static Tienda shop = null;
 		
 	public Tienda() {
-		this.usuarios=new ArrayList<Usuario>();
-		this.inventario=new ArrayList<Componente>();
-		this.facturas=new ArrayList<Factura>();
-		this.clientes=new ArrayList<Cliente>();
-		this.suministradores=new ArrayList<Suministrador>();
-		this.ordenesCompra=new ArrayList<OrdenCompra>();
+		this.usuarios = new ArrayList<Usuario>();
+		this.inventario = new ArrayList<Componente>();
+		this.facturas = new ArrayList<Factura>();
+		this.clientes = new ArrayList<Cliente>();
+		this.suministradores = new ArrayList<Suministrador>();
+		this.ordenesCompra = new ArrayList<OrdenCompra>();
+	}
+	
+	public Tienda getInstance() {
+		if (shop == null) {
+			shop = new Tienda();
+		}
+		return shop;
 	}
 
 	public ArrayList<Usuario> getUsuarios() {
@@ -73,16 +81,76 @@ public class Tienda {
 	}
 	
 	public float montoTotalFactura(String codFactura) {
-		Factura factura=buscarFacturaById(codFactura);
+		Factura factura = buscarFacturaById(codFactura);
 		
 		return factura.precioTotal();
 	}
 	
-	private Factura buscarFacturaById(String codFactura) {
+	public Factura buscarFacturaById(String codFactura) {
 		
 		for(Factura f:facturas) {
 			if(f.getId().equalsIgnoreCase(codFactura)) {
 				return f;
+			}
+		}
+		return null;
+	}
+	
+	public Componente buscarComponenteBySerial(String serial) {
+		
+		for(Componente c : inventario) {
+			if(c.getSerial().equalsIgnoreCase(serial)) {
+				return c;
+			}
+		}
+		return null;
+	}
+	
+	public Componente buscarComponenteById(String id) {
+		
+		for(Componente c : inventario) {
+			if(c.getId().equalsIgnoreCase(id)) {
+				return c;
+			}
+		}
+		return null;
+	}
+	
+	public Cliente buscarClienteByCedula(String cedula) {
+		
+		for(Cliente c : clientes) {
+			if(c.getCedula().equalsIgnoreCase(cedula)) {
+				return c;
+			}
+		}
+		return null;
+	}
+	
+	public Usuario buscarUsuarioById(String id) {
+		
+		for(Usuario u : usuarios) {
+			if(u.getId().equalsIgnoreCase(id)) {
+				return u;
+			}
+		}
+		return null;
+	}
+	
+	public Suministrador buscarSumiById(String id) {
+		
+		for(Suministrador sumi : suministradores) {
+			if(sumi.getId().equalsIgnoreCase(id)) {
+				return sumi;
+			}
+		}
+		return null;
+	}
+	
+	public OrdenCompra buscarOrdenById(String id) {
+		
+		for(OrdenCompra orden : ordenesCompra) {
+			if(orden.getId().equalsIgnoreCase(id)) {
+				return orden;
 			}
 		}
 		return null;
@@ -126,23 +194,23 @@ public class Tienda {
 	}
 
 	public void insertarUsuario(Usuario nuevoUsuario) {
-		//TODO
+		usuarios.add(nuevoUsuario);
 	}
 	
 	public void insertarCliente(Cliente nuevoCliente) {
-		//TODO
+		clientes.add(nuevoCliente);
 	}
 	
 	public void insertarComponente(Componente nuevoComponente) {
-		//TODO
+		inventario.add(nuevoComponente);
 	}
 	
 	public void insertarFactura(Factura nuevaFactura) {
-		//TODO
+		facturas.add(nuevaFactura);
 	}
 	
 	public void insertarSuministrador(Suministrador nuevoSuministrador) {
-		//TODO
+		suministradores.add(nuevoSuministrador);
 	}
 	
 	public void otorgarCredito(float monto,Cliente cliente) {
