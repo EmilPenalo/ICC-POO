@@ -177,10 +177,12 @@ public class Tienda {
 	}
 	
 	public float obtenerPrecioOrdenCompra(String idOrden) {
-		
-		OrdenCompra orden=buscarOrdenCompraById(idOrden);
-		
-		return orden.precioTotal();
+		OrdenCompra orden = buscarOrdenCompraById(idOrden);
+			
+		if (orden != null) {
+			return orden.precioTotal();
+		}
+		return -1;
 	}
 	
 	private OrdenCompra buscarOrdenCompraById(String idOrden) {
