@@ -11,7 +11,7 @@ public class Tienda {
 		private ArrayList<OrdenCompra> ordenesCompra;
 		private static Tienda shop = null;
 		
-	public Tienda() {
+	private Tienda() {
 		this.usuarios = new ArrayList<Usuario>();
 		this.inventario = new ArrayList<Componente>();
 		this.facturas = new ArrayList<Factura>();
@@ -75,9 +75,16 @@ public class Tienda {
 		this.ordenesCompra = ordenesCompra;
 	}
 	
-	public boolean chequearCompatibilidad(String modeloBoard,String serialComp) {
-		//TODO
+	public boolean chequearCompatibilidad(String serialBoard,String serialComp) {
+		
+		Componente board=buscarComponenteBySerial(serialBoard);
+		Componente comp=buscarComponenteBySerial(serialComp);
+		
+		if(board instanceof MotherBoard && !(comp instanceof MotherBoard)) {
+			return ((MotherBoard)board).compatibilidadConBoard(comp);
+		}else {
 		return false;
+		}
 	}
 	
 	public float montoTotalFactura(String codFactura) {
@@ -156,24 +163,26 @@ public class Tienda {
 		return null;
 	}
 
-	public float obtenerPrecioComponente(String serial) {
-		//TODO
-		return 0;
+	public float obtenerPrecioComponente(String id) {
+		
+		Componente comp=buscarComponenteById(id);
+		
+		return comp.getPrecio();
 	}
 	
 	public float calcularEquivalenciaMb(float valor) {
-		//TODO
-		return 0;
+		
+		return valor*1024;
 	}
 	
 	public float calcularEquivalenciaMhz(float valor) {
-		//TODO 
-		return 0;
+		 
+		return valor*1000;
 	}
 	
 	public float calcularEquivalenciaTb(float valor) {
-		//TODO
-		return 0;
+		
+		return valor/1000;
 	}
 	
 	public float obtenerPrecioOrdenCompra(String idOrden) {
@@ -216,6 +225,24 @@ public class Tienda {
 	}
 	
 	public void otorgarCredito(float monto,Cliente cliente) {
-		//TODO
+		
+		cliente.setCredito(cliente.getCredito()+monto);
+	}
+	
+	public float calcularComisionVendedor(String idVendedor,float comision) {
+		
+		float total=0;
+		Usuario vendedor=buscarUsuarioById(idVendedor);
+		
+		if(vendedor.getTipo().equalsIgnoreCase("Vendedor")) {
+		for(Factura f:facturas) {
+			if(f.getId().equalsIgnoreCase(idVendedor)) {
+				total+=f.precioTotal();
+			}
+		}
+		}else {
+		return 0;
+		}
+		return total*(comision/100);
 	}
 }
