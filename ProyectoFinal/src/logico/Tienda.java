@@ -87,18 +87,13 @@ public class Tienda {
 
 	public boolean chequearCompatibilidad(String serialBoard,String serialComp) {
 		
-		Componente board = buscarComponenteBySerial(serialBoard);
-		Componente comp = buscarComponenteBySerial(serialComp);
+		Componente board=buscarComponenteBySerial(serialBoard);
+		Componente comp=buscarComponenteBySerial(serialComp);
 		
-		if (board != null && comp != null) {
-			if(board instanceof MotherBoard && !(comp instanceof MotherBoard)) {
-				return ((MotherBoard) board).compatibilidadConBoard(comp);
-				
-			} else {
-				return false;
-			}
-		} else {
-			return false;
+		if(board instanceof MotherBoard && !(comp instanceof MotherBoard)) {
+			return ((MotherBoard)board).compatibilidadConBoard(comp);
+		}else {
+		return false;
 		}
 	}
 	
@@ -180,7 +175,7 @@ public class Tienda {
 
 	public float obtenerPrecioComponente(String id) {
 		
-		Componente comp = buscarComponenteById(id);
+		Componente comp=buscarComponenteById(id);
 		
 		return comp.getPrecio();
 	}
@@ -246,23 +241,19 @@ public class Tienda {
 	
 	public float calcularComisionVendedor(String idVendedor,float comision) {
 		
-		float total = 0;
-		Usuario vendedor = buscarUsuarioById(idVendedor);
+		float total=0;
+		Usuario vendedor=buscarUsuarioById(idVendedor);
 		
-		if (vendedor != null) {
-			if (vendedor.getTipo().equalsIgnoreCase("Vendedor")) {
-				for(Factura f : facturas) {
-					if (f.getId().equalsIgnoreCase(idVendedor)) {
-						total += f.precioTotal();
-					}
-				}
-			} else {
-				return -1;
+		if(vendedor.getTipo().equalsIgnoreCase("Vendedor")) {
+		for(Factura f:facturas) {
+			if(f.getId().equalsIgnoreCase(idVendedor)) {
+				total+=f.precioTotal();
 			}
-			return total*(comision/100);
-		} else {
-			return -1;
 		}
+		}else {
+		return 0;
+		}
+		return total*(comision/100);
 	}
 
 	public void insertarCombo(Combo nuevoCombo) {
