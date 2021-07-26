@@ -19,7 +19,6 @@ public class Tienda {
 		this.clientes = new ArrayList<Cliente>();
 		this.suministradores = new ArrayList<Suministrador>();
 		this.ordenesCompra = new ArrayList<OrdenCompra>();
-		this.combos=new ArrayList<Combo>();
 	}
 	
 	public static Tienda getInstance() {
