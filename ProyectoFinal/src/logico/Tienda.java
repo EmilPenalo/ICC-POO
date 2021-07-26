@@ -255,8 +255,8 @@ public class Tienda {
 		return total*(comision/100);
 	}
 
+
 	public void insertarCombo(Combo nuevoCombo) {
-		combos.add(nuevoCombo);
-		
+		combos.add(nuevoCombo);	
 	}
 }
