@@ -9,6 +9,7 @@ public class Tienda {
 		private ArrayList<Cliente> clientes;
 		private ArrayList<Suministrador> suministradores;
 		private ArrayList<OrdenCompra> ordenesCompra;
+		private ArrayList<Combo> combos;
 		private static Tienda shop = null;
 		
 	private Tienda() {
@@ -18,9 +19,10 @@ public class Tienda {
 		this.clientes = new ArrayList<Cliente>();
 		this.suministradores = new ArrayList<Suministrador>();
 		this.ordenesCompra = new ArrayList<OrdenCompra>();
+		this.combos=new ArrayList<Combo>();
 	}
 	
-	public Tienda getInstance() {
+	public static Tienda getInstance() {
 		if (shop == null) {
 			shop = new Tienda();
 		}
@@ -75,6 +77,14 @@ public class Tienda {
 		this.ordenesCompra = ordenesCompra;
 	}
 	
+	public ArrayList<Combo> getCombos() {
+		return combos;
+	}
+
+	public void setCombos(ArrayList<Combo> combos) {
+		this.combos = combos;
+	}
+
 	public boolean chequearCompatibilidad(String serialBoard,String serialComp) {
 		
 		Componente board=buscarComponenteBySerial(serialBoard);
@@ -244,5 +254,10 @@ public class Tienda {
 		return 0;
 		}
 		return total*(comision/100);
+	}
+
+	public void insertarCombo(Combo nuevoCombo) {
+		combos.add(nuevoCombo);
+		
 	}
 }

@@ -6,6 +6,7 @@ public class Usuario {
 	protected String userName;
 	protected String passWord;
 	protected String tipo;
+	public static int cod=1;
 	
 	public Usuario(String id, String nombre, String userName, String passWord,String tipo) {
 		super();
