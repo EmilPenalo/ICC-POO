@@ -1,20 +1,24 @@
 package logico;
 
-public class Usuario {
+import java.io.Serializable;
+
+public class Usuario implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	protected String id;
 	protected String nombre;
 	protected String userName;
 	protected String passWord;
-	protected String tipo;
-	public static int cod=1;
+	protected char tipo;
+	public static int cod = 1;
 	
-	public Usuario(String id, String nombre, String userName, String passWord,String tipo) {
+	public Usuario(String id, String nombre, String userName, String passWord, char tipo) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.userName = userName;
 		this.passWord = passWord;
-		this.tipo=tipo;
+		this.tipo = tipo;
 	}
 
 	public String getId() {
@@ -49,11 +53,11 @@ public class Usuario {
 		this.passWord = passWord;
 	}
 
-	public String getTipo() {
+	public char getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(String tipo) {
+	public void setTipo(char tipo) {
 		this.tipo = tipo;
 	}
 }

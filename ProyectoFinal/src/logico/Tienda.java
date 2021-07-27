@@ -1,16 +1,22 @@
 package logico;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Tienda {
-		private ArrayList<Usuario> usuarios;
-		private ArrayList<Componente> inventario;
-		private ArrayList<Factura> facturas;
-		private ArrayList<Cliente> clientes;
-		private ArrayList<Suministrador> suministradores;
-		private ArrayList<OrdenCompra> ordenesCompra;
-		private ArrayList<Combo> combos;
-		private static Tienda shop = null;
+public class Tienda implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+	
+	private ArrayList<Usuario> usuarios;
+	private ArrayList<Componente> inventario;
+	private ArrayList<Factura> facturas;
+	private ArrayList<Cliente> clientes;
+	private ArrayList<Suministrador> suministradores;
+	private ArrayList<OrdenCompra> ordenesCompra;
+	private ArrayList<Combo> combos;
+	
+	private static Usuario loginUser;
+	private static Tienda shop = null;
 		
 	private Tienda() {
 		this.usuarios = new ArrayList<Usuario>();
@@ -84,22 +90,45 @@ public class Tienda {
 		this.combos = combos;
 	}
 
+	public static Usuario getLoginUser() {
+		return loginUser;
+	}
+
+	public static void setLoginUser(Usuario loginUser) {
+		Tienda.loginUser = loginUser;
+	}
+
+	public static Tienda getTienda() {
+		return shop;
+	}
+
+	public static void setTienda(Tienda tienda) {
+		Tienda.shop = tienda;
+	}
+
 	public boolean chequearCompatibilidad(String serialBoard,String serialComp) {
 		
-		Componente board=buscarComponenteBySerial(serialBoard);
-		Componente comp=buscarComponenteBySerial(serialComp);
+		Componente board = buscarComponenteBySerial(serialBoard);
+		Componente comp = buscarComponenteBySerial(serialComp);
 		
-		if(board instanceof MotherBoard && !(comp instanceof MotherBoard)) {
-			return ((MotherBoard)board).compatibilidadConBoard(comp);
-		}else {
-		return false;
+		if (board != null && comp != null) {
+			if(board instanceof MotherBoard && !(comp instanceof MotherBoard)) {
+				return ((MotherBoard)board).compatibilidadConBoard(comp);
+			} else {
+				return false;
+			}
+		} else {
+			return false;
 		}
 	}
 	
 	public float montoTotalFactura(String codFactura) {
 		Factura factura = buscarFacturaById(codFactura);
-		
-		return factura.precioTotal();
+		if (factura != null) {
+			return factura.precioTotal();
+		} else {
+			return -1;
+		}
 	}
 	
 	public Factura buscarFacturaById(String codFactura) {
@@ -174,9 +203,12 @@ public class Tienda {
 
 	public float obtenerPrecioComponente(String id) {
 		
-		Componente comp=buscarComponenteById(id);
-		
-		return comp.getPrecio();
+		Componente comp = buscarComponenteById(id);
+		if (comp != null) {
+			return comp.getPrecio();
+		} else {
+			return -1;
+		}
 	}
 	
 	public float calcularEquivalenciaMb(float valor) {
@@ -205,7 +237,7 @@ public class Tienda {
 	
 	private OrdenCompra buscarOrdenCompraById(String idOrden) {
 		
-		for(OrdenCompra ord:ordenesCompra) {
+		for(OrdenCompra ord : ordenesCompra) {
 			if(ord.getId().equalsIgnoreCase(idOrden)) {
 				return ord;
 			}
@@ -238,25 +270,39 @@ public class Tienda {
 		cliente.setCredito(cliente.getCredito()+monto);
 	}
 	
-	public float calcularComisionVendedor(String idVendedor,float comision) {
+	public float calcularComisionVendedor(String idVendedor, float comision) {
 		
-		float total=0;
+		float total = 0;
 		Usuario vendedor=buscarUsuarioById(idVendedor);
 		
-		if(vendedor.getTipo().equalsIgnoreCase("Vendedor")) {
-		for(Factura f:facturas) {
-			if(f.getId().equalsIgnoreCase(idVendedor)) {
-				total+=f.precioTotal();
+		if (vendedor != null) {
+			if(vendedor.getTipo() == 'V') {
+				for(Factura f : facturas) {
+					if(f.getId().equalsIgnoreCase(idVendedor)) {
+						total += f.precioTotal();
+					}
+				}
+			} else {
+				return -1;
 			}
+			return total*(comision/100);
+		} else {
+			return -1;
 		}
-		}else {
-		return 0;
-		}
-		return total*(comision/100);
 	}
 
 
 	public void insertarCombo(Combo nuevoCombo) {
 		combos.add(nuevoCombo);	
+	}
+	
+	public boolean confirmLogin(String username, String password) {
+		for (Usuario u : usuarios) {
+			if (u.getUserName().equals(username) && u.getPassWord().equals(password)) {
+				loginUser = u;
+				return true;
+			}
+		}
+		return false;
 	}
 }

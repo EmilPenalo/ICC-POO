@@ -50,6 +50,8 @@ public class RegUsuario extends JDialog {
 	public RegUsuario() {
 		setTitle("Registrar Usuario");
 		setBounds(100, 100, 379, 326);
+		setLocationRelativeTo(null);
+		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -65,7 +67,7 @@ public class RegUsuario extends JDialog {
 			}
 			{
 				txtId = new JTextField();
-				txtId.setText(String.valueOf(Usuario.cod));
+				txtId.setText("U-" + Usuario.cod);
 				txtId.setEditable(false);
 				txtId.setBounds(31, 29, 203, 20);
 				panel.add(txtId);
@@ -83,7 +85,7 @@ public class RegUsuario extends JDialog {
 				txtNombre.setColumns(10);
 			}
 			{
-				JLabel lblNewLabel_2 = new JLabel("UserName:");
+				JLabel lblNewLabel_2 = new JLabel("Username:");
 				lblNewLabel_2.setBounds(10, 133, 66, 14);
 				panel.add(lblNewLabel_2);
 			}
@@ -94,7 +96,7 @@ public class RegUsuario extends JDialog {
 				txtUserName.setColumns(10);
 			}
 			{
-				JLabel lblNewLabel_3 = new JLabel("PassWord:");
+				JLabel lblNewLabel_3 = new JLabel("Password:");
 				lblNewLabel_3.setBounds(10, 173, 66, 14);
 				panel.add(lblNewLabel_3);
 			}
@@ -120,10 +122,14 @@ public class RegUsuario extends JDialog {
 				btnRegistar = new JButton("Registrar");
 				btnRegistar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						Usuario user=new Usuario(txtId.getText(),txtNombre.getText(),txtUserName.getText(),txtPassWord.getPassword().toString(),cbxTipo.getSelectedItem().toString());
-						Tienda.getInstance().insertarUsuario(user);
-						JOptionPane.showMessageDialog(null, "Nuevo usuario registrado con exito","Registrar Usuario", JOptionPane.INFORMATION_MESSAGE);
-						clean();
+						if (cbxTipo.getSelectedIndex() != 0) {
+							Usuario user = new Usuario(txtId.getText(),txtNombre.getText(),txtUserName.getText(), new String(txtPassWord.getPassword()) ,cbxTipo.getSelectedItem().toString().charAt(0));
+							Tienda.getInstance().insertarUsuario(user);
+							JOptionPane.showMessageDialog(null, "Nuevo usuario registrado con exito","Registrar Usuario", JOptionPane.INFORMATION_MESSAGE);
+							clean();
+						} else {
+							JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo usuario","Informacion", JOptionPane.INFORMATION_MESSAGE);
+						}
 					}
 				});
 				buttonPane.add(btnRegistar);
@@ -142,7 +148,7 @@ public class RegUsuario extends JDialog {
 		}
 	}
 	private void clean() {
-		txtId.setText(String.valueOf(Usuario.cod));
+		txtId.setText("U-" + Usuario.cod);
 		txtNombre.setText("");
 		txtUserName.setText("");
 		txtPassWord.setText("");
