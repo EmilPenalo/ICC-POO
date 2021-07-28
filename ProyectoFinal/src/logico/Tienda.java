@@ -305,4 +305,53 @@ public class Tienda implements Serializable{
 		}
 		return false;
 	}
+
+	public void eliminarCombo(Combo selected) {
+		combos.remove(selected);
+	}
+	
+	public void modificarCombo(Combo selected) {
+		int index=buscarIndexOfComboById(selected.getId());
+		combos.set(index,selected);
+	}
+
+	private int buscarIndexOfComboById(String id) {
+		int ind=0;
+		for(Combo com:combos) {
+			if(com.getId().equalsIgnoreCase(id)) {
+				return ind;
+			}
+			ind++;
+		}
+		return -1;
+	}
+
+	public Combo buscarComboById(String id) {
+		for(Combo com:combos) {
+			if(com.getId().equalsIgnoreCase(id)) {
+				return com;
+			}
+		}
+		return null;
+	}
+	
+	public void eliminarCliente(Cliente selected) {
+		clientes.remove(selected);
+	}
+	
+	public void modificarCliente(Cliente selected) {
+		int index=buscarIndexOfClienteByCedula(selected.getCedula());
+		clientes.set(index,selected);
+	}
+
+	private int buscarIndexOfClienteByCedula(String cedula) {
+		int ind=0;
+		for(Cliente c:clientes) {
+			if(c.getCedula().equalsIgnoreCase(cedula)) {
+				return ind;
+			}
+			ind++;
+		}
+		return -1;
+	}
 }
