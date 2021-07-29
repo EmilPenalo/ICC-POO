@@ -41,11 +41,12 @@ public class RegCombo extends JDialog {
 	private DefaultListModel<String> listModelDisp;
 	private DefaultListModel<String> listModelCombo;
 	private JSpinner spnDescuento;
+	private Combo selected;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		try {
 			RegCombo dialog = new RegCombo();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -53,13 +54,18 @@ public class RegCombo extends JDialog {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	/**
 	 * Create the dialog.
 	 */
-	public RegCombo() {
+	public RegCombo(Combo combo) {
+		selected=combo;
+		if(selected==null) {
 		setTitle("Registrar Combo");
+		}else {
+			setTitle("Modificar combo");
+		}
 		setBounds(100, 100, 447, 470);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -70,10 +76,16 @@ public class RegCombo extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				btnRegistrar = new JButton("Registrar");
+				btnRegistrar = new JButton();
+				if(selected==null) {
+					btnRegistrar.setText("Registrar");
+				}else {
+					btnRegistrar.setText("Mofificar");
+				}
 				btnRegistrar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						if(listModelCombo.size()>=2) {
+							if(selected==null) {
 						Combo combo=new Combo(txtId.getText(), txtNombre.getText(),new Integer(spnDescuento.getValue().toString()));
 						for(int i=0;i<listModelCombo.size();i++) {
 							String id=new String(listModelCombo.get(i).toString());
@@ -83,6 +95,19 @@ public class RegCombo extends JDialog {
 						Tienda.getInstance().insertarCombo(combo);
 						JOptionPane.showMessageDialog(null,"Nuvo combo registrado con exito","Registrar Combo",JOptionPane.INFORMATION_MESSAGE);
 						clean();
+							}else {
+								selected.setId(txtId.getText());
+								selected.setNombre(txtNombre.getText());
+								selected.setDescuento(Integer.valueOf(spnDescuento.getValue().toString()));
+								for(int i=0;i<listModelCombo.size();i++) {
+									String id=new String(listModelCombo.get(i).toString());
+									Componente comp=Tienda.getInstance().buscarComponenteById(id);
+									selected.getComponentes().set(i, comp);
+								}
+								Tienda.getInstance().modificarCombo(selected);
+								dispose();
+								ListCombo.loadTable();
+							}
 						}else {
 							JOptionPane.showMessageDialog(null,"Necesita al menos 2 componentes para registrar un combo","Registrar Combo",JOptionPane.ERROR_MESSAGE);
 						}
@@ -231,6 +256,7 @@ public class RegCombo extends JDialog {
 			panel.add(separator);
 		}
 		loadComponenteDisponibles();
+		loadCombo();
 	}
 
 	private void loadComponenteDisponibles() {
@@ -248,5 +274,17 @@ public class RegCombo extends JDialog {
 		txtNombre.setText("");
 		spnDescuento.setValue(new Integer(0));
 		listModelCombo.removeAllElements();
+	}
+	
+	private void loadCombo() {
+		if(selected!=null) {
+			txtId.setText(selected.getId());
+			txtNombre.setText(selected.getNombre());
+			spnDescuento.setValue(selected.getDescuento());
+			
+			for(int i=0;i<selected.getComponentes().size();i++) {
+				listModelCombo.setElementAt(selected.getId(),i);
+			}
+		}
 	}
 }

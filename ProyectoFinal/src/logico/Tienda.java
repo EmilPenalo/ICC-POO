@@ -354,4 +354,27 @@ public class Tienda implements Serializable{
 		}
 		return -1;
 	}
+
+	public void modificarSuministrador(Suministrador selected) {
+		int index=buscarIndexOfSumiById(selected.getId());
+		
+		suministradores.set(index, selected);
+		
+	}
+
+	private int buscarIndexOfSumiById(String id) {
+		int ind=0;
+		for(Suministrador sumi:suministradores) {
+			if(sumi.getId().equalsIgnoreCase(id)) {
+				return ind;
+			}
+			ind++;
+		}
+		return -1;
+	}
+
+	public void eliminarSuministrador(Suministrador selected) {
+		suministradores.remove(selected);
+		
+	}
 }

@@ -98,6 +98,13 @@ public class Principal extends JFrame {
 		menuBar.add(mnClientes);
 		
 		JMenuItem mntmListClientes = new JMenuItem("Listar Clientes");
+		mntmListClientes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ListCliente listCliente=new ListCliente();
+				listCliente.setModal(true);
+				listCliente.setVisible(true);
+			}
+		});
 		mnClientes.add(mntmListClientes);
 		
 		JMenu mnUsuarios = new JMenu("Usuarios");
@@ -134,7 +141,7 @@ public class Principal extends JFrame {
 		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Nuevo");
 		mntmNewMenuItem_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegCombo regcombo = new RegCombo();
+				RegCombo regcombo = new RegCombo(null);
 				regcombo.setModal(true);
 				regcombo.setVisible(true);
 			}
@@ -142,15 +149,36 @@ public class Principal extends JFrame {
 		mnNewMenu_1.add(mntmNewMenuItem_4);
 		
 		JMenuItem mntmNewMenuItem_5 = new JMenuItem("Listar");
+		mntmNewMenuItem_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ListCombo listCombo= new ListCombo();
+				listCombo.setModal(true);
+				listCombo.setVisible(true);
+			}
+		});
 		mnNewMenu_1.add(mntmNewMenuItem_5);
 		
 		JMenu mnNewMenu_2 = new JMenu("Suministradores");
 		mnAdmin.add(mnNewMenu_2);
 		
 		JMenuItem mntmNewMenuItem_6 = new JMenuItem("Registrar");
+		mntmNewMenuItem_6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RegSuministrador regSumi=new RegSuministrador(null);
+				regSumi.setModal(true);
+				regSumi.setVisible(true);
+			}
+		});
 		mnNewMenu_2.add(mntmNewMenuItem_6);
 		
 		JMenuItem mntmNewMenuItem_7 = new JMenuItem("Listar");
+		mntmNewMenuItem_7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ListSuministrador listSumi=new ListSuministrador();
+				listSumi.setModal(true);
+				listSumi.setVisible(true);
+			}
+		});
 		mnNewMenu_2.add(mntmNewMenuItem_7);
 		
 		JMenu mnNewMenu_3 = new JMenu("Ordenes de Compra");
@@ -160,7 +188,24 @@ public class Principal extends JFrame {
 		mnNewMenu_3.add(mntmNewMenuItem_8);
 		
 		JMenuItem mntmNewMenuItem_9 = new JMenuItem("Listar");
+		mntmNewMenuItem_9.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ListOrdenCompra listOrdenCompra=new ListOrdenCompra();
+				listOrdenCompra.setModal(true);
+				listOrdenCompra.setVisible(true);
+			}
+		});
 		mnNewMenu_3.add(mntmNewMenuItem_9);
+		
+		JMenuItem mntmNewMenuItem_10 = new JMenuItem("Otorgar Cr\u00E9dito");
+		mntmNewMenuItem_10.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OtorgarCredito credito=new OtorgarCredito();
+				credito.setModal(true);
+				credito.setVisible(true);
+			}
+		});
+		mnAdmin.add(mntmNewMenuItem_10);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
