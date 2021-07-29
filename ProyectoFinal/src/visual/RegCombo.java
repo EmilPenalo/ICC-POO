@@ -6,13 +6,12 @@ import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
 import logico.Combo;
 import logico.Componente;
 import logico.Tienda;
 
-import javax.swing.BoxLayout;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -26,6 +25,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.border.TitledBorder;
+import javax.swing.JSeparator;
+import javax.swing.UIManager;
+import java.awt.Color;
 
 public class RegCombo extends JDialog {
 	private JButton btnRegistrar;
@@ -33,10 +36,10 @@ public class RegCombo extends JDialog {
 	private JTextField txtNombre;
 	private JButton btnDerecha;
 	private JButton btnIzquierda;
-	private JList listCombo;
-	private JList listDisponible;
-	private DefaultListModel listModelDisp;
-	private DefaultListModel listModelCombo;
+	private JList<String> listCombo;
+	private JList<String> listDisponible;
+	private DefaultListModel<String> listModelDisp;
+	private DefaultListModel<String> listModelCombo;
 	private JSpinner spnDescuento;
 
 	/**
@@ -57,10 +60,13 @@ public class RegCombo extends JDialog {
 	 */
 	public RegCombo() {
 		setTitle("Registrar Combo");
-		setBounds(100, 100, 447, 368);
+		setBounds(100, 100, 447, 470);
+		setLocationRelativeTo(null);
+		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
 		{
 			JPanel buttonPane = new JPanel();
+			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
@@ -99,62 +105,63 @@ public class RegCombo extends JDialog {
 		}
 		{
 			JPanel panel = new JPanel();
+			panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 			getContentPane().add(panel, BorderLayout.CENTER);
 			panel.setLayout(null);
 			{
-				JLabel lblNewLabel = new JLabel("Id:");
-				lblNewLabel.setBounds(10, 23, 46, 14);
+				JLabel lblNewLabel = new JLabel("Codigo:");
+				lblNewLabel.setBounds(15, 16, 56, 20);
 				panel.add(lblNewLabel);
 			}
 			{
 				txtId = new JTextField();
-				txtId.setText(String.valueOf(Combo.cod));
+				txtId.setText("CC-" + Combo.cod);
 				txtId.setEditable(false);
-				txtId.setBounds(35, 20, 202, 20);
+				txtId.setBounds(84, 11, 146, 30);
 				panel.add(txtId);
 				txtId.setColumns(10);
 			}
 			{
 				JLabel lblNewLabel_1 = new JLabel("Nombre:");
-				lblNewLabel_1.setBounds(10, 59, 61, 14);
+				lblNewLabel_1.setBounds(15, 59, 71, 20);
 				panel.add(lblNewLabel_1);
 			}
 			{
 				txtNombre = new JTextField();
-				txtNombre.setBounds(59, 56, 211, 20);
+				txtNombre.setBounds(84, 54, 326, 30);
 				panel.add(txtNombre);
 				txtNombre.setColumns(10);
 			}
 			{
 				JLabel lblNewLabel_2 = new JLabel("Descuento:");
-				lblNewLabel_2.setBounds(10, 101, 74, 14);
+				lblNewLabel_2.setBounds(15, 101, 89, 20);
 				panel.add(lblNewLabel_2);
 			}
 			{
 				spnDescuento = new JSpinner();
 				spnDescuento.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
-				spnDescuento.setBounds(78, 98, 147, 20);
+				spnDescuento.setBounds(84, 96, 146, 30);
 				panel.add(spnDescuento);
 			}
 			{
-				JLabel lblNewLabel_3 = new JLabel("Componente Disponibles:");
-				lblNewLabel_3.setBounds(10, 136, 127, 14);
+				JLabel lblNewLabel_3 = new JLabel("Disponibles:");
+				lblNewLabel_3.setBounds(15, 158, 163, 20);
 				panel.add(lblNewLabel_3);
 			}
 			{
 				JScrollPane scrollPane = new JScrollPane();
-				scrollPane.setBounds(10, 149, 127, 136);
+				scrollPane.setBounds(15, 194, 147, 184);
 				panel.add(scrollPane);
 				{
-					listModelDisp=new DefaultListModel();
-					listDisponible = new JList();
+					listModelDisp = new DefaultListModel<String>();
+					listDisponible = new JList<String>();
 					listDisponible.setModel(listModelDisp);
 					listDisponible.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-							int index=-1;
-							index=listDisponible.getSelectedIndex();
-							if(index!=-1){
+							int index =- 1;
+							index = listDisponible.getSelectedIndex();
+							if (index != -1){
 								btnDerecha.setEnabled(true);
 							}
 						}
@@ -174,7 +181,7 @@ public class RegCombo extends JDialog {
 				btnDerecha.addMouseListener(new MouseAdapter() {
 				});
 				btnDerecha.setEnabled(false);
-				btnDerecha.setBounds(147, 176, 89, 23);
+				btnDerecha.setBounds(168, 239, 89, 30);
 				panel.add(btnDerecha);
 			}
 			{
@@ -188,28 +195,28 @@ public class RegCombo extends JDialog {
 				btnIzquierda.addMouseListener(new MouseAdapter() {
 				});
 				btnIzquierda.setEnabled(false);
-				btnIzquierda.setBounds(147, 245, 89, 23);
+				btnIzquierda.setBounds(168, 308, 89, 30);
 				panel.add(btnIzquierda);
 			}
 			{
-				JLabel lblNewLabel_4 = new JLabel(" Componente Combo:");
-				lblNewLabel_4.setBounds(246, 136, 121, 14);
+				JLabel lblNewLabel_4 = new JLabel("Seleccionados:");
+				lblNewLabel_4.setBounds(263, 158, 121, 20);
 				panel.add(lblNewLabel_4);
 			}
 			{
 				JScrollPane scrollPane = new JScrollPane();
-				scrollPane.setBounds(246, 149, 147, 136);
+				scrollPane.setBounds(263, 194, 147, 184);
 				panel.add(scrollPane);
 				{
-					listModelCombo=new DefaultListModel();
-					listCombo = new JList();
+					listModelCombo = new DefaultListModel<String>();
+					listCombo = new JList<String>();
 					listCombo.setModel(listModelCombo);
 					listCombo.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-							int index=-1;
-							index=listCombo.getSelectedIndex();
-							if(index!=-1){
+							int index =- 1;
+							index = listCombo.getSelectedIndex();
+							if (index != -1){
 								btnIzquierda.setEnabled(true);
 							}
 						}
@@ -218,6 +225,10 @@ public class RegCombo extends JDialog {
 					scrollPane.setViewportView(listCombo);
 				}
 			}
+			
+			JSeparator separator = new JSeparator();
+			separator.setBounds(15, 140, 395, 2);
+			panel.add(separator);
 		}
 		loadComponenteDisponibles();
 	}
@@ -225,8 +236,8 @@ public class RegCombo extends JDialog {
 	private void loadComponenteDisponibles() {
 		String aux;
 		listModelDisp.removeAllElements();
-		for(Componente c:Tienda.getInstance().getInventario()) {
-			aux=new String(c.getId());
+		for (Componente c:Tienda.getInstance().getInventario()) {
+			aux = new String(c.getId());
 			listModelDisp.addElement(aux);
 		}
 		
@@ -238,5 +249,4 @@ public class RegCombo extends JDialog {
 		spnDescuento.setValue(new Integer(0));
 		listModelCombo.removeAllElements();
 	}
-
 }
