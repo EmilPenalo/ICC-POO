@@ -109,7 +109,7 @@ public class RegCombo extends JDialog {
 								ListCombo.loadTable();
 							}
 						}else {
-							JOptionPane.showMessageDialog(null,"Necesita al menos 2 componentes para registrar un combo","Registrar Combo",JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(null,"Necesita al menos 2 componentes para registrar un combo","Aviso",JOptionPane.WARNING_MESSAGE);
 						}
 						}
 				});

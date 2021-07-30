@@ -92,6 +92,13 @@ public class Principal extends JFrame {
 		mnVentas.add(mntmHacerVentas);
 		
 		JMenuItem mntmListFacturas = new JMenuItem("Listado de Facturas");
+		mntmListFacturas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ListFactura listFactura=new ListFactura();
+				listFactura.setModal(true);
+				listFactura.setVisible(true);
+			}
+		});
 		mnVentas.add(mntmListFacturas);
 		
 		JMenu mnClientes = new JMenu("Clientes");

@@ -62,7 +62,7 @@ public class OtorgarCredito extends JDialog {
 			panel.add(lblNewLabel);
 			
 			txtCedula = new JTextField();
-			txtCedula.setBounds(90, 21, 197, 20);
+			txtCedula.setBounds(97, 21, 197, 20);
 			panel.add(txtCedula);
 			txtCedula.setColumns(10);
 			
@@ -79,7 +79,7 @@ public class OtorgarCredito extends JDialog {
 					}
 				}
 			});
-			btnBuscar.setBounds(300, 20, 89, 23);
+			btnBuscar.setBounds(325, 20, 89, 23);
 			panel.add(btnBuscar);
 			
 			JLabel lblNewLabel_1 = new JLabel("Credito Actual:");
@@ -88,17 +88,17 @@ public class OtorgarCredito extends JDialog {
 			
 			txtCreditoActual = new JTextField();
 			txtCreditoActual.setEditable(false);
-			txtCreditoActual.setBounds(87, 56, 103, 20);
+			txtCreditoActual.setBounds(100, 56, 103, 20);
 			panel.add(txtCreditoActual);
 			txtCreditoActual.setColumns(10);
 			
-			JLabel lblNewLabel_2 = new JLabel("Monto a otorgar:");
-			lblNewLabel_2.setBounds(10, 103, 85, 14);
+			JLabel lblNewLabel_2 = new JLabel("Monto:");
+			lblNewLabel_2.setBounds(10, 103, 48, 14);
 			panel.add(lblNewLabel_2);
 			
 			spnMonto = new JSpinner();
 			spnMonto.setModel(new SpinnerNumberModel(new Float(0), new Float(0), null, new Float(1)));
-			spnMonto.setBounds(100, 100, 187, 20);
+			spnMonto.setBounds(53, 100, 187, 20);
 			panel.add(spnMonto);
 		}
 		{
