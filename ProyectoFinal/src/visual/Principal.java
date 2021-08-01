@@ -223,6 +223,13 @@ public class Principal extends JFrame {
 		mnAdmin.add(mnNewMenu_3);
 		
 		JMenuItem mntmNewMenuItem_8 = new JMenuItem("Hacer Pedido");
+		mntmNewMenuItem_8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			RegOrdenCompra regOrden=new RegOrdenCompra(null);
+			regOrden.setModal(true);
+			regOrden.setVisible(true);
+			}
+		});
 		mnNewMenu_3.add(mntmNewMenuItem_8);
 		
 		JMenuItem mntmNewMenuItem_9 = new JMenuItem("Listar");

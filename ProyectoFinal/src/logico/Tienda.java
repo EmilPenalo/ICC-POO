@@ -392,4 +392,29 @@ public class Tienda implements Serializable{
 	public void eliminarUsuario(Usuario selected) {
 		usuarios.remove(selected);
 	}
+
+	public void insertarOrdenCompra(OrdenCompra nuevaorden) {
+		ordenesCompra.add(nuevaorden);
+	}
+
+	public void modificarOrdenCompra(OrdenCompra selected) {
+		int index=buscarIndexOfOrdenCompraById(selected.getId());
+		ordenesCompra.set(index, selected);
+	}
+
+	private int buscarIndexOfOrdenCompraById(String id) {
+		int ind=0;
+		for(OrdenCompra ord:ordenesCompra) {
+			if(ord.getId().equalsIgnoreCase(id)) {
+				return ind;
+			}
+			ind++;
+		}
+		return -1;
+	}
+
+	public void eliminarOrdenCompra(OrdenCompra selected) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -26,7 +26,9 @@ public class ListOrdenCompra extends JDialog {
 	private JTable table;
 	private static DefaultTableModel model;
 	private static Object[] rows;
-	private Combo selected;
+	private OrdenCompra selected;
+	private static JButton btnEliminar;
+	private static JButton btnModificar;
 
 	/**
 	 * Launch the application.
@@ -66,11 +68,10 @@ public class ListOrdenCompra extends JDialog {
 						index=table.getSelectedRow();
 						if(index!=-1)
 						{
-							/*btnModificar.setEnabled(true);
+							btnModificar.setEnabled(true);
 							btnEliminar.setEnabled(true);
-							btnHistorial.setEnabled(true);*/
-							String id=(String)(model.getValueAt(index,0));
-							selected=Tienda.getInstance().buscarComboById(id);
+							String id=model.getValueAt(index,0).toString();
+							selected=Tienda.getInstance().buscarOrdenById(id);
 						}
 					}
 				});
@@ -83,10 +84,29 @@ public class ListOrdenCompra extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				btnEliminar = new JButton("Eliminar");
+				btnEliminar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Tienda.getInstance().eliminarOrdenCompra(selected);
+						loadTable();
+					}
+				});
+				btnEliminar.setEnabled(false);
+				buttonPane.add(btnEliminar);
+			}
+			{
+				btnModificar = new JButton("Modificar");
+				btnModificar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						RegOrdenCompra modOrden=new RegOrdenCompra(null);
+						modOrden.setModal(true);
+						modOrden.setVisible(true);
+					}
+				});
+				btnModificar.setEnabled(false);
+				btnModificar.setActionCommand("OK");
+				buttonPane.add(btnModificar);
+				getRootPane().setDefaultButton(btnModificar);
 			}
 			{
 				JButton cancelButton = new JButton("Cancelar");
@@ -113,6 +133,8 @@ public class ListOrdenCompra extends JDialog {
 			rows[4]=ord.getFecha();
 			model.addRow(rows);
 		}
+		btnModificar.setEnabled(false);
+		btnEliminar.setEnabled(false);
 	}
 
 }

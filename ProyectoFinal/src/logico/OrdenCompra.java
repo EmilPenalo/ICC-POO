@@ -9,15 +9,15 @@ public class OrdenCompra {
 	private ArrayList<Componente> componentes;
 	private int cantUnidades;
 	private Date fecha;
-	public static int cod; 
+	public static int cod=1; 
 	
-	public OrdenCompra(String id, Suministrador suministrador, int cantUnidades, Date fecha) {
+	public OrdenCompra(String id, Suministrador suministrador, int cantUnidades) {
 		super();
 		this.id = id;
 		this.suministrador = suministrador;
 		this.componentes=new ArrayList<Componente>();
 		this.cantUnidades = cantUnidades;
-		this.fecha = fecha;
+		this.fecha = new Date();
 		cod++;
 	}
 
