@@ -387,4 +387,8 @@ public class Tienda implements Serializable{
 	public void eliminarComponente(Componente selected) {
 		inventario.remove(selected);
 	}
+
+	public void eliminarUsuario(Usuario selected) {
+		usuarios.remove(selected);
+	}
 }
