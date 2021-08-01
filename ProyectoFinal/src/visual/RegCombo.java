@@ -25,6 +25,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
 import javax.swing.border.TitledBorder;
 import javax.swing.JSeparator;
 import javax.swing.UIManager;
@@ -84,34 +86,37 @@ public class RegCombo extends JDialog {
 				}
 				btnRegistrar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						if(listModelCombo.size()>=2) {
-							if(selected==null) {
-						Combo combo=new Combo(txtId.getText(), txtNombre.getText(),new Integer(spnDescuento.getValue().toString()));
-						for(int i=0;i<listModelCombo.size();i++) {
-							String id=new String(listModelCombo.get(i).toString());
-							Componente comp=Tienda.getInstance().buscarComponenteById(id);
+						if (listModelCombo.size()>=2) {
+							if (selected == null) {
+						Combo combo = new Combo(txtId.getText(), txtNombre.getText(),new Integer(spnDescuento.getValue().toString()));
+						for(int i = 0; i < listModelCombo.size(); i++) {
+							String id = new String(listModelCombo.get(i).toString());
+							Componente comp = Tienda.getInstance().buscarComponenteById(id);
 							combo.agregarComponente(comp);
 						}
 						Tienda.getInstance().insertarCombo(combo);
-						JOptionPane.showMessageDialog(null,"Nuvo combo registrado con exito","Registrar Combo",JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null,"Nuevo combo registrado con exito","Registrar Combo",JOptionPane.INFORMATION_MESSAGE);
 						clean();
-							}else {
-								selected.setId(txtId.getText());
+							} else {
 								selected.setNombre(txtNombre.getText());
 								selected.setDescuento(Integer.valueOf(spnDescuento.getValue().toString()));
-								for(int i=0;i<listModelCombo.size();i++) {
-									String id=new String(listModelCombo.get(i).toString());
-									Componente comp=Tienda.getInstance().buscarComponenteById(id);
-									selected.getComponentes().set(i, comp);
+								
+								ArrayList<Componente> componentes = new ArrayList<>();
+								for (int i = 0; i < listModelCombo.size(); i++) {
+									String id = new String(listModelCombo.get(i).toString());
+									Componente comp = Tienda.getInstance().buscarComponenteById(id);
+									if (comp != null) {
+										componentes.add(comp);
+									}
 								}
-								Tienda.getInstance().modificarCombo(selected);
+								selected.setComponentes(componentes);
 								dispose();
 								ListCombo.loadTable();
 							}
-						}else {
+						} else {
 							JOptionPane.showMessageDialog(null,"Necesita al menos 2 componentes para registrar un combo","Aviso",JOptionPane.WARNING_MESSAGE);
 						}
-						}
+					}
 				});
 				btnRegistrar.setActionCommand("OK");
 				buttonPane.add(btnRegistrar);
@@ -140,7 +145,7 @@ public class RegCombo extends JDialog {
 			}
 			{
 				txtId = new JTextField();
-				txtId.setText("CC-" + Combo.cod);
+				txtId.setText("COMBO-" + Combo.cod);
 				txtId.setEditable(false);
 				txtId.setBounds(84, 11, 146, 30);
 				panel.add(txtId);
@@ -199,7 +204,9 @@ public class RegCombo extends JDialog {
 				btnDerecha = new JButton(">>");
 				btnDerecha.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						listModelCombo.addElement(listDisponible.getSelectedValue().toString());
+						String aux = listDisponible.getSelectedValue().toString();
+						listModelCombo.addElement(aux);
+						listModelDisp.remove(listDisponible.getSelectedIndex());
 						btnDerecha.setEnabled(false);
 					}
 				});
@@ -213,7 +220,9 @@ public class RegCombo extends JDialog {
 				btnIzquierda = new JButton("<<");
 				btnIzquierda.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						listModelCombo.removeElement(listCombo.getSelectedValue());
+						String aux = listCombo.getSelectedValue().toString();
+						listModelDisp.addElement(aux);
+						listModelCombo.remove(listCombo.getSelectedIndex());
 						btnIzquierda.setEnabled(false);
 					}
 				});
@@ -262,28 +271,36 @@ public class RegCombo extends JDialog {
 	private void loadComponenteDisponibles() {
 		String aux;
 		listModelDisp.removeAllElements();
-		for (Componente c:Tienda.getInstance().getInventario()) {
-			aux = new String(c.getId());
-			listModelDisp.addElement(aux);
+		for (Componente c : Tienda.getInstance().getInventario()) {
+			if (selected != null) {
+				if (!selected.getComponentes().contains(c)) {
+					aux = new String(c.getId());
+					listModelDisp.addElement(aux);
+				}
+			} else {
+				aux = new String(c.getId());
+				listModelDisp.addElement(aux);
+			}
 		}
 		
 	}
 	
 	private void clean() {
-		txtId.setText(String.valueOf(Combo.cod));
+		txtId.setText("COMBO-" + Combo.cod);
 		txtNombre.setText("");
-		spnDescuento.setValue(new Integer(0));
+		spnDescuento.setValue(0);
+		loadComponenteDisponibles();
 		listModelCombo.removeAllElements();
 	}
 	
 	private void loadCombo() {
-		if(selected!=null) {
+		if (selected != null) {
 			txtId.setText(selected.getId());
 			txtNombre.setText(selected.getNombre());
 			spnDescuento.setValue(selected.getDescuento());
 			
-			for(int i=0;i<selected.getComponentes().size();i++) {
-				listModelCombo.setElementAt(selected.getId(),i);
+			for (Componente c : selected.getComponentes()) {
+				listModelCombo.addElement(c.getId());
 			}
 		}
 	}

@@ -6,6 +6,7 @@ import java.awt.HeadlessException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -52,6 +53,7 @@ public class ListCliente extends JDialog {
 	public ListCliente() {
 		setTitle("Listar Cliente");
 		setBounds(100, 100, 450, 300);
+		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -69,15 +71,14 @@ public class ListCliente extends JDialog {
 				table.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						int index=-1;
-						index=table.getSelectedRow();
-						if(index!=-1)
-						{
+						int index = -1;
+						index = table.getSelectedRow();
+						if(index != -1) {
 							btnModificar.setEnabled(true);
 							btnEliminar.setEnabled(true);
 							btnHistorial.setEnabled(true);
-							String cedula=(String)(model.getValueAt(index,0));
-							selected=Tienda.getInstance().buscarClienteByCedula(cedula);
+							String cedula = (String)(model.getValueAt(index,0));
+							selected = Tienda.getInstance().buscarClienteByCedula(cedula);
 						}
 					}
 				});
@@ -90,17 +91,52 @@ public class ListCliente extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				btnHistorial = new JButton("Historial de Compra");
+				btnHistorial = new JButton("Historial");
+				btnHistorial.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						ListFactura historial = new ListFactura(selected);
+						historial.setModal(true);
+						historial.setVisible(true);
+						
+						btnEliminar.setEnabled(false);
+						btnModificar.setEnabled(false);
+						btnHistorial.setEnabled(false);
+					}
+				});
 				btnHistorial.setEnabled(false);
 				buttonPane.add(btnHistorial);
 			}
 			{
 				btnModificar = new JButton("Modificar");
+				btnModificar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						RegCliente aux = new RegCliente(selected);
+						aux.setModal(true);
+						aux.setVisible(true);
+						
+						btnEliminar.setEnabled(false);
+						btnModificar.setEnabled(false);
+						btnHistorial.setEnabled(false);
+					}
+				});
 				btnModificar.setEnabled(false);
 				buttonPane.add(btnModificar);
 			}
 			{
 				btnEliminar = new JButton("Eliminar");
+				btnEliminar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						int option = JOptionPane.showConfirmDialog(null, "Desea eliminar el cliente seleccionado: " + selected.getCedula() + "?", "Eliminar Cliente", JOptionPane.YES_NO_OPTION);
+						if (option == JOptionPane.YES_OPTION) {
+							Tienda.getInstance().eliminarCliente(selected);
+							loadTable();
+						}
+						
+						btnEliminar.setEnabled(false);
+						btnModificar.setEnabled(false);
+						btnHistorial.setEnabled(false);
+					}
+				});
 				btnEliminar.setEnabled(false);
 				btnEliminar.setActionCommand("OK");
 				buttonPane.add(btnEliminar);

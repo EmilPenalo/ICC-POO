@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.border.TitledBorder;
 
 public class OtorgarCredito extends JDialog {
 
@@ -48,68 +49,72 @@ public class OtorgarCredito extends JDialog {
 	public OtorgarCredito() {
 		setTitle("Otorgar Credito Cliente");
 		setBounds(100, 100, 450, 218);
+		setLocationRelativeTo(null);
+		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		{
 			JPanel panel = new JPanel();
+			panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			contentPanel.add(panel, BorderLayout.CENTER);
 			panel.setLayout(null);
 			
 			JLabel lblNewLabel = new JLabel("C\u00E9dula Cliente:");
-			lblNewLabel.setBounds(10, 24, 85, 14);
+			lblNewLabel.setBounds(15, 16, 114, 14);
 			panel.add(lblNewLabel);
 			
 			txtCedula = new JTextField();
-			txtCedula.setBounds(97, 21, 197, 20);
+			txtCedula.setBounds(110, 8, 197, 30);
 			panel.add(txtCedula);
 			txtCedula.setColumns(10);
 			
 			btnBuscar = new JButton("Buscar");
 			btnBuscar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					cliente=Tienda.getInstance().buscarClienteByCedula(txtCedula.getText());
-					if(cliente!=null) {
+					cliente = Tienda.getInstance().buscarClienteByCedula(txtCedula.getText());
+					if(cliente != null) {
 						btnOtorgar.setEnabled(true);
 						txtCreditoActual.setText(String.valueOf(cliente.getCredito()));
 						JOptionPane.showMessageDialog(null,"Cliente encontrado","Otorgar Credito cliente", JOptionPane.INFORMATION_MESSAGE);
-					}else {
-						JOptionPane.showMessageDialog(null,"El cliente no existe.Inténtelo nuevamente","Otorgar Credito cliente", JOptionPane.ERROR_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(null,"El cliente no existe. Inténtelo nuevamente","Otorgar Credito cliente", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			});
-			btnBuscar.setBounds(325, 20, 89, 23);
+			btnBuscar.setBounds(325, 8, 89, 30);
 			panel.add(btnBuscar);
 			
 			JLabel lblNewLabel_1 = new JLabel("Credito Actual:");
-			lblNewLabel_1.setBounds(10, 59, 85, 14);
+			lblNewLabel_1.setBounds(15, 59, 139, 14);
 			panel.add(lblNewLabel_1);
 			
 			txtCreditoActual = new JTextField();
 			txtCreditoActual.setEditable(false);
-			txtCreditoActual.setBounds(100, 56, 103, 20);
+			txtCreditoActual.setBounds(110, 51, 130, 30);
 			panel.add(txtCreditoActual);
 			txtCreditoActual.setColumns(10);
 			
 			JLabel lblNewLabel_2 = new JLabel("Monto:");
-			lblNewLabel_2.setBounds(10, 103, 48, 14);
+			lblNewLabel_2.setBounds(15, 97, 89, 14);
 			panel.add(lblNewLabel_2);
 			
 			spnMonto = new JSpinner();
 			spnMonto.setModel(new SpinnerNumberModel(new Float(0), new Float(0), null, new Float(1)));
-			spnMonto.setBounds(53, 100, 187, 20);
+			spnMonto.setBounds(110, 89, 130, 30);
 			panel.add(spnMonto);
 		}
 		{
 			JPanel buttonPane = new JPanel();
+			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				btnOtorgar = new JButton("Otorgar Credito");
 				btnOtorgar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						cliente.setCredito(cliente.getCredito()+Float.valueOf(spnMonto.getValue().toString()));
+						cliente.setCredito(cliente.getCredito() + Float.valueOf(spnMonto.getValue().toString()));
 						JOptionPane.showMessageDialog(null, "Credito otorgado con exito", "Otogar credito Cliente", JOptionPane.INFORMATION_MESSAGE);
 						clean();
 					}

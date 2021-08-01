@@ -1,9 +1,14 @@
 package logico;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class OrdenCompra {
+public class OrdenCompra implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String id;
 	private Suministrador suministrador;
 	private ArrayList<Componente> componentes;
@@ -72,8 +77,8 @@ public class OrdenCompra {
 	public float precioTotal() {
 		float total=0;
 		
-		for(int i=0;i<componentes.size();i++) {
-		total+=componentes.get(i).getPrecio()*cantUnidades;
+		for (int i=0;i<componentes.size();i++) {
+			total+=componentes.get(i).getPrecio()*cantUnidades;
 		}
 		
 		return total;

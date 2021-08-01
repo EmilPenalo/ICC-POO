@@ -94,12 +94,19 @@ public class Principal extends JFrame {
 		menuBar.add(mnVentas);
 		
 		JMenuItem mntmHacerVentas = new JMenuItem("Hacer Venta");
+		mntmHacerVentas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				RegCliente temp = new RegCliente(null);
+				temp.setModal(true);
+				temp.setVisible(true);
+			}
+		});
 		mnVentas.add(mntmHacerVentas);
 		
 		JMenuItem mntmListFacturas = new JMenuItem("Listado de Facturas");
 		mntmListFacturas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ListFactura listFactura=new ListFactura();
+				ListFactura listFactura = new ListFactura(null);
 				listFactura.setModal(true);
 				listFactura.setVisible(true);
 			}

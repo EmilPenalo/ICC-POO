@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -49,6 +50,7 @@ public class ListSuministrador extends JDialog {
 	public ListSuministrador() {
 		setTitle("Listar Suministrador");
 		setBounds(100, 100, 450, 300);
+		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -57,7 +59,7 @@ public class ListSuministrador extends JDialog {
 			scrollPane = new JScrollPane();
 			contentPanel.add(scrollPane, BorderLayout.CENTER);
 			{
-				String[] headers= {"Id","Nombre","País","Cant. Componentes","Entrega"};
+				String[] headers= {"Id","Nombre","País","Componentes","Entrega"};
 				model=new DefaultTableModel();
 				model.setColumnIdentifiers(headers);
 				table = new JTable();
@@ -87,8 +89,14 @@ public class ListSuministrador extends JDialog {
 				btnEliminar = new JButton("Eliminar");
 				btnEliminar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						Tienda.getInstance().eliminarSuministrador(selected);
-						loadTable();
+						int option = JOptionPane.showConfirmDialog(null, "Desea eliminar el Suministrador: " + selected.getId() + "?", "Eliminar Suministrador", JOptionPane.YES_NO_OPTION);
+						if (option == JOptionPane.YES_OPTION) {
+							Tienda.getInstance().eliminarSuministrador(selected);
+							loadTable();
+						}
+						
+						btnEliminar.setEnabled(false);
+						btnModificar.setEnabled(false);
 					}
 				});
 				btnEliminar.setEnabled(false);
@@ -98,7 +106,7 @@ public class ListSuministrador extends JDialog {
 				btnModificar = new JButton("Modificar");
 				btnModificar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						RegSuministrador modSumi=new RegSuministrador(selected);
+						RegSuministrador modSumi = new RegSuministrador(selected);
 						modSumi.setModal(true);
 						modSumi.setVisible(true);
 					}
@@ -124,13 +132,13 @@ public class ListSuministrador extends JDialog {
 
 	public static void loadTable() {
 		model.setRowCount(0);
-		rows=new Object[model.getColumnCount()];
+		rows = new Object[model.getColumnCount()];
 		for(Suministrador sumi:Tienda.getInstance().getSuministradores()) {
-			rows[0]=sumi.getId();
-			rows[1]=sumi.getNombre();
-			rows[2]=sumi.getPais();
-			rows[3]=sumi.getComps().size();
-			rows[4]=sumi.getEntrega();
+			rows[0] = sumi.getId();
+			rows[1] = sumi.getNombre();
+			rows[2] = sumi.getPais();
+			rows[3] = sumi.getComponentes().size();
+			rows[4] = sumi.getEntrega();
 			model.addRow(rows);
 		}
 		btnModificar.setEnabled(false);

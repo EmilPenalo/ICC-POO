@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import logico.Cliente;
 import logico.Factura;
 import logico.Tienda;
 
@@ -26,13 +27,14 @@ public class ListFactura extends JDialog {
 	private static DefaultTableModel model;
 	private static Object[] rows;
 	private Factura selected;
+	private static Cliente cliente = null;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			ListFactura dialog = new ListFactura();
+			ListFactura dialog = new ListFactura(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -43,9 +45,13 @@ public class ListFactura extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ListFactura() {
+	public ListFactura(Cliente clienteDado) {
+		cliente = clienteDado;
+		
 		setTitle("Listar Facturas");
 		setBounds(100, 100, 450, 300);
+		setLocationRelativeTo(null);
+		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -61,12 +67,11 @@ public class ListFactura extends JDialog {
 				table.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						int index=-1;
-						index=table.getSelectedRow();
-						if(index!=-1)
-						{
-							String id=(String)(model.getValueAt(index,0));
-							selected=Tienda.getInstance().buscarFacturaById(id);
+						int index = -1;
+						index = table.getSelectedRow();
+						if(index != -1) {
+ 							String id = (String)(model.getValueAt(index,0));
+							selected = Tienda.getInstance().buscarFacturaById(id);
 						}
 					}
 				});
@@ -79,13 +84,7 @@ public class ListFactura extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancelar");
+				JButton cancelButton = new JButton("Cerrar");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dispose();
@@ -100,15 +99,32 @@ public class ListFactura extends JDialog {
 
 	public static void loadTable() {
 		model.setRowCount(0);
-		rows=new Object[model.getColumnCount()];
-		for(Factura f:Tienda.getInstance().getFacturas()) {
-			rows[0]=f.getId();
-			rows[1]=f.getCliente().getNombre();
-			rows[2]=f.getVenta().size();
-			rows[3]=f.getDescuento();
-			rows[4]=f.getFecha();
-			model.addRow(rows);
+		rows = new Object[model.getColumnCount()];
+		if (cliente == null) {
+			for (Factura f : Tienda.getInstance().getFacturas()) {
+				
+				rows[0] = f.getId();
+				rows[1] = f.getCliente().getNombre();
+				rows[2] = f.getVenta().size();
+				rows[3] = f.getDescuento();
+				rows[4] = f.getFecha();
+				
+				model.addRow(rows);
+			}
+		} else {
+			for (Factura f : Tienda.getInstance().getFacturas()) {
+				if (f.getCliente().getCedula().equalsIgnoreCase(cliente.getCedula())) {
+					rows[0] = f.getId();
+					rows[1] = f.getCliente().getNombre();
+					rows[2] = f.getVenta().size();
+					rows[3] = f.getDescuento();
+					rows[4] = f.getFecha();
+					
+					model.addRow(rows);
+				}
+			}
 		}
+
 	}
 
 }

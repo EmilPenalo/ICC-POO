@@ -1,13 +1,14 @@
 package logico;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Suministrador {
+public class Suministrador implements Serializable{
 	private String id;
 	private String nombre;
 	private String pais;
 	private int entrega;
-	private ArrayList<Componente> comps;
+	private ArrayList<Componente> componentes;
 	public static int cod=1;
 	
 	public Suministrador(String id, String nombre, String pais, int entrega) {
@@ -16,7 +17,7 @@ public class Suministrador {
 		this.nombre = nombre;
 		this.pais = pais;
 		this.entrega = entrega;
-		this.comps =new ArrayList<Componente>();
+		this.componentes = new ArrayList<Componente>();
 		cod++;
 	}
 
@@ -52,12 +53,12 @@ public class Suministrador {
 		this.entrega = entrega;
 	}
 
-	public ArrayList<Componente> getComps() {
-		return comps;
+	public ArrayList<Componente> getComponentes() {
+		return componentes;
 	}
 
-	public void setComps(ArrayList<Componente> comps) {
-		this.comps = comps;
+	public void setComponentes(ArrayList<Componente> comps) {
+		this.componentes = comps;
 	}
 
 	public static int getCod() {

@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -49,6 +50,7 @@ public class ListOrdenCompra extends JDialog {
 	public ListOrdenCompra() {
 		setTitle("Listar Orden de Compra");
 		setBounds(100, 100, 450, 300);
+		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -64,14 +66,14 @@ public class ListOrdenCompra extends JDialog {
 				table.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						int index=-1;
-						index=table.getSelectedRow();
-						if(index!=-1)
+						int index =- 1;
+						index = table.getSelectedRow();
+						if(index != -1)
 						{
 							btnModificar.setEnabled(true);
 							btnEliminar.setEnabled(true);
-							String id=model.getValueAt(index,0).toString();
-							selected=Tienda.getInstance().buscarOrdenById(id);
+							String id = model.getValueAt(index,0).toString();
+							selected = Tienda.getInstance().buscarOrdenById(id);
 						}
 					}
 				});
@@ -87,8 +89,15 @@ public class ListOrdenCompra extends JDialog {
 				btnEliminar = new JButton("Eliminar");
 				btnEliminar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						Tienda.getInstance().eliminarOrdenCompra(selected);
-						loadTable();
+						int option = JOptionPane.showConfirmDialog(null, "Desea eliminar la orden seleccionada: " + selected.getId() + "?", "Eliminar Orden de Compra", JOptionPane.YES_NO_OPTION);
+						if (option == JOptionPane.YES_OPTION) {
+							Tienda.getInstance().eliminarOrdenCompra(selected);
+							loadTable();
+						}
+						
+						btnEliminar.setEnabled(false);
+						btnModificar.setEnabled(false);
+
 					}
 				});
 				btnEliminar.setEnabled(false);
@@ -98,7 +107,7 @@ public class ListOrdenCompra extends JDialog {
 				btnModificar = new JButton("Modificar");
 				btnModificar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						RegOrdenCompra modOrden=new RegOrdenCompra(null);
+						RegOrdenCompra modOrden = new RegOrdenCompra(selected);
 						modOrden.setModal(true);
 						modOrden.setVisible(true);
 					}
@@ -124,13 +133,13 @@ public class ListOrdenCompra extends JDialog {
 
 	public static void loadTable() {
 		model.setRowCount(0);
-		rows=new Object[model.getColumnCount()];
+		rows = new Object[model.getColumnCount()];
 		for(OrdenCompra ord:Tienda.getInstance().getOrdenesCompra()) {
-			rows[0]=ord.getId();
-			rows[1]=ord.getSuministrador().getNombre();
-			rows[2]=ord.getComponentes().size();
-			rows[3]=ord.getCantUnidades();
-			rows[4]=ord.getFecha();
+			rows[0] = ord.getId();
+			rows[1] = ord.getSuministrador().getNombre();
+			rows[2] = ord.getComponentes().size();
+			rows[3] = ord.getCantUnidades();
+			rows[4] = ord.getFecha();
 			model.addRow(rows);
 		}
 		btnModificar.setEnabled(false);

@@ -316,16 +316,11 @@ public class Tienda implements Serializable{
 	public void eliminarCombo(Combo selected) {
 		combos.remove(selected);
 	}
-	
-	public void modificarCombo(Combo selected) {
-		int index=buscarIndexOfComboById(selected.getId());
-		combos.set(index,selected);
-	}
 
 	private int buscarIndexOfComboById(String id) {
-		int ind=0;
-		for(Combo com:combos) {
-			if(com.getId().equalsIgnoreCase(id)) {
+		int ind = 0;
+		for (Combo com : combos) {
+			if (com.getId().equalsIgnoreCase(id)) {
 				return ind;
 			}
 			ind++;
@@ -334,8 +329,8 @@ public class Tienda implements Serializable{
 	}
 
 	public Combo buscarComboById(String id) {
-		for(Combo com:combos) {
-			if(com.getId().equalsIgnoreCase(id)) {
+		for (Combo com : combos) {
+			if (com.getId().equalsIgnoreCase(id)) {
 				return com;
 			}
 		}
@@ -347,14 +342,14 @@ public class Tienda implements Serializable{
 	}
 	
 	public void modificarCliente(Cliente selected) {
-		int index=buscarIndexOfClienteByCedula(selected.getCedula());
+		int index = buscarIndexOfClienteByCedula(selected.getCedula());
 		clientes.set(index,selected);
 	}
 
 	private int buscarIndexOfClienteByCedula(String cedula) {
-		int ind=0;
-		for(Cliente c:clientes) {
-			if(c.getCedula().equalsIgnoreCase(cedula)) {
+		int ind = 0;
+		for (Cliente c:clientes) {
+			if (c.getCedula().equalsIgnoreCase(cedula)) {
 				return ind;
 			}
 			ind++;
@@ -362,17 +357,10 @@ public class Tienda implements Serializable{
 		return -1;
 	}
 
-	public void modificarSuministrador(Suministrador selected) {
-		int index=buscarIndexOfSumiById(selected.getId());
-		
-		suministradores.set(index, selected);
-		
-	}
-
 	private int buscarIndexOfSumiById(String id) {
 		int ind=0;
-		for(Suministrador sumi:suministradores) {
-			if(sumi.getId().equalsIgnoreCase(id)) {
+		for (Suministrador sumi:suministradores) {
+			if (sumi.getId().equalsIgnoreCase(id)) {
 				return ind;
 			}
 			ind++;
@@ -403,9 +391,9 @@ public class Tienda implements Serializable{
 	}
 
 	private int buscarIndexOfOrdenCompraById(String id) {
-		int ind=0;
-		for(OrdenCompra ord:ordenesCompra) {
-			if(ord.getId().equalsIgnoreCase(id)) {
+		int ind = 0;
+		for (OrdenCompra ord:ordenesCompra) {
+			if (ord.getId().equalsIgnoreCase(id)) {
 				return ind;
 			}
 			ind++;
@@ -415,5 +403,14 @@ public class Tienda implements Serializable{
 
 	public void eliminarOrdenCompra(OrdenCompra selected) {
 		ordenesCompra.remove(selected);
+	}
+
+	public boolean checkCedula(String cedula) {
+		for (Cliente c : clientes) {
+			if (c.getCedula().equalsIgnoreCase(cedula)) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

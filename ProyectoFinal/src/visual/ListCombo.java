@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -51,6 +52,7 @@ public class ListCombo extends JDialog {
 	public ListCombo() {
 		setTitle("Listar Combo");
 		setBounds(100, 100, 450, 300);
+		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -60,21 +62,21 @@ public class ListCombo extends JDialog {
 			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 			contentPanel.add(scrollPane, BorderLayout.CENTER);
 			{
-				String[] headers= {"Id","Nombre","Descuento","Cant. Componentes"};
+				String[] headers= {"Id","Nombre","Descuento","Componentes"};
 				model=new DefaultTableModel();
 				model.setColumnIdentifiers(headers);
 				table = new JTable();
 				table.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						int index=-1;
-						index=table.getSelectedRow();
-						if(index!=-1)
+						int index = -1;
+						index = table.getSelectedRow();
+						if(index != -1)
 						{
 							btnModificar.setEnabled(true);
 							btnEliminar.setEnabled(true);
-							String id=(String)(model.getValueAt(index,0));
-							selected=Tienda.getInstance().buscarComboById(id);
+							String id = (String)(model.getValueAt(index,0));
+							selected = Tienda.getInstance().buscarComboById(id);
 						}
 					}
 				});
@@ -91,8 +93,14 @@ public class ListCombo extends JDialog {
 				btnEliminar = new JButton("Eliminar");
 				btnEliminar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						Tienda.getInstance().eliminarCombo(selected);
-						loadTable();
+						int option = JOptionPane.showConfirmDialog(null, "Desea eliminar el combo seleccionado: " + selected.getId() + "?", "Eliminar Combo", JOptionPane.YES_NO_OPTION);
+						if (option == JOptionPane.YES_OPTION) {
+							Tienda.getInstance().eliminarCombo(selected);
+							loadTable();
+						}
+						
+						btnEliminar.setEnabled(false);
+						btnModificar.setEnabled(false);
 					}
 				});
 				btnEliminar.setEnabled(false);
@@ -100,6 +108,16 @@ public class ListCombo extends JDialog {
 			}
 			{
 				btnModificar = new JButton("Modificar");
+				btnModificar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						RegCombo aux = new RegCombo(selected);
+						aux.setModal(true);
+						aux.setVisible(true);
+						
+						btnEliminar.setEnabled(false);
+						btnModificar.setEnabled(false);
+					}
+				});
 				btnModificar.setEnabled(false);
 				btnModificar.setActionCommand("OK");
 				buttonPane.add(btnModificar);
@@ -121,12 +139,12 @@ public class ListCombo extends JDialog {
 
 	public static void loadTable() {
 		model.setRowCount(0);
-		rows=new Object[model.getColumnCount()];
+		rows = new Object[model.getColumnCount()];
 		for(Combo com:Tienda.getInstance().getCombos()) {
-			rows[0]=com.getId();
-			rows[1]=com.getNombre();
-			rows[2]=com.getDescuento();
-			rows[3]=com.getComponentes().size();
+			rows[0] = com.getId();
+			rows[1] = com.getNombre();
+			rows[2] = com.getDescuento();
+			rows[3] = com.getComponentes().size();
 			model.addRow(rows);
 		}
 		btnModificar.setEnabled(false);
