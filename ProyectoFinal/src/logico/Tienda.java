@@ -414,7 +414,6 @@ public class Tienda implements Serializable{
 	}
 
 	public void eliminarOrdenCompra(OrdenCompra selected) {
-		// TODO Auto-generated method stub
-		
+		ordenesCompra.remove(selected);
 	}
 }
