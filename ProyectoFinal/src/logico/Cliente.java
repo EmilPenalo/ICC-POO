@@ -10,6 +10,7 @@ public class Cliente implements Serializable {
 	private String direccion;
 	private String telefono;
 	private float credito;
+	private float creditoEnUso;
 	
 	public Cliente(String cedula, String nombre, String direccion, String telefono) {
 		super();
@@ -18,6 +19,7 @@ public class Cliente implements Serializable {
 		this.direccion = direccion;
 		this.telefono = telefono;
 		this.credito = 0;
+		this.creditoEnUso = 0;
 	}
 
 	public String getCedula() {
@@ -58,6 +60,14 @@ public class Cliente implements Serializable {
 
 	public void setCredito(float credito) {
 		this.credito = credito;
+	}
+
+	public float getCreditoEnUso() {
+		return creditoEnUso;
+	}
+
+	public void setCreditoEnUso(float creditoEnUso) {
+		this.creditoEnUso = creditoEnUso;
 	}
 	
 }

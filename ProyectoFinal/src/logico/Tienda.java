@@ -413,4 +413,9 @@ public class Tienda implements Serializable{
 		}
 		return true;
 	}
+
+	public void completarFactura(FacturaCredito f) {
+		f.setPendiente(false);
+		f.getCliente().setCreditoEnUso(f.getCliente().getCreditoEnUso() - f.precioTotal());
+	}
 }
