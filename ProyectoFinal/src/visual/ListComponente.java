@@ -152,7 +152,7 @@ public class ListComponente extends JDialog {
 					btnEliminar = new JButton("Eliminar");
 					btnEliminar.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
-							int option = JOptionPane.showConfirmDialog(null, "Desea eliminar el componente seleccionado: " + selected.getId() + "?", "Eliminar cliente", JOptionPane.YES_NO_OPTION);
+							int option = JOptionPane.showConfirmDialog(null, "Desea eliminar el componente seleccionado: " + selected.getId() + "?", "Eliminar componente", JOptionPane.YES_NO_OPTION);
 							if (option == JOptionPane.YES_OPTION) {
 								Tienda.getInstance().eliminarComponente(selected);
 								loadTable(0);

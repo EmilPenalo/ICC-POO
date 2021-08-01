@@ -36,9 +36,13 @@ public class Principal extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					Principal frame = new Principal();
-					frame.setVisible(true);
+				try {					
+					if (Tienda.getLoginUser() == null) {
+						Login.main(args);
+					} else {
+						Principal frame = new Principal();
+						frame.setVisible(true);
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -127,11 +131,22 @@ public class Principal extends JFrame {
 		});
 		mnUsuarios.add(mntmNewMenuItem);
 		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Listar");
-		mnUsuarios.add(mntmNewMenuItem_1);
+		JMenuItem mntmListarUsuarios = new JMenuItem("Listar");
+		mnUsuarios.add(mntmListarUsuarios);
+		if (Tienda.getLoginUser().getTipo() == 'A') {
+			mntmListarUsuarios.setEnabled(true);
+		} else {
+			mntmListarUsuarios.setEnabled(false);
+		}
+		
 		
 		JMenu mnAdmin = new JMenu("Administracion");
 		menuBar.add(mnAdmin);
+		if (Tienda.getLoginUser().getTipo() == 'A') {
+			mnAdmin.setEnabled(true);
+		} else {
+			mnAdmin.setEnabled(false);
+		}
 		
 		JMenu mnNewMenu = new JMenu("Inventario");
 		mnAdmin.add(mnNewMenu);
