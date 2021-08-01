@@ -133,13 +133,27 @@ public class Principal extends JFrame {
 		JMenu mnAdmin = new JMenu("Administracion");
 		menuBar.add(mnAdmin);
 		
-		JMenu mnNewMenu = new JMenu("Componentes");
+		JMenu mnNewMenu = new JMenu("Inventario");
 		mnAdmin.add(mnNewMenu);
 		
-		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Registrar");
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Registrar Componente");
+		mntmNewMenuItem_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RegComponente regComp = new RegComponente(null);
+				regComp.setModal(true);
+				regComp.setVisible(true);
+			}
+		});
 		mnNewMenu.add(mntmNewMenuItem_2);
 		
-		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Listar");
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Ver inventario");
+		mntmNewMenuItem_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ListComponente listComp = new ListComponente();
+				listComp.setModal(true);
+				listComp.setVisible(true);
+			}
+		});
 		mnNewMenu.add(mntmNewMenuItem_3);
 		
 		JMenu mnNewMenu_1 = new JMenu("Combos");

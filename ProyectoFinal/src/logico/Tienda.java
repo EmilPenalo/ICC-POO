@@ -217,9 +217,14 @@ public class Tienda implements Serializable{
 		return valor*1024;
 	}
 	
-	public float calcularEquivalenciaMhz(float valor) {
+	public static float calcularEquivalenciaMhz(float valor) {
 		 
 		return valor*1000;
+	}
+	
+	public static float calcularEquivalenciaGhz(float valor) {
+		 
+		return valor/1000;
 	}
 	
 	public float calcularEquivalenciaTb(float valor) {
@@ -377,5 +382,9 @@ public class Tienda implements Serializable{
 	public void eliminarSuministrador(Suministrador selected) {
 		suministradores.remove(selected);
 		
+	}
+
+	public void eliminarComponente(Componente selected) {
+		inventario.remove(selected);
 	}
 }
