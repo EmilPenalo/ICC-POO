@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import logico.Administrador;
 import logico.Tienda;
 
 import java.awt.event.WindowAdapter;
@@ -121,6 +122,12 @@ public class Principal extends JFrame {
 		JMenu mnUsuarios = new JMenu("Usuarios");
 		menuBar.add(mnUsuarios);
 		
+		if (Tienda.getLoginUser() instanceof Administrador) {
+			mnUsuarios.setEnabled(true);
+		} else {
+			mnUsuarios.setEnabled(false);
+		}
+		
 		JMenuItem mntmNewMenuItem = new JMenuItem("Registrar");
 		mntmNewMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -133,16 +140,11 @@ public class Principal extends JFrame {
 		
 		JMenuItem mntmListarUsuarios = new JMenuItem("Listar");
 		mnUsuarios.add(mntmListarUsuarios);
-		if (Tienda.getLoginUser().getTipo() == 'A') {
-			mntmListarUsuarios.setEnabled(true);
-		} else {
-			mntmListarUsuarios.setEnabled(false);
-		}
 		
 		
 		JMenu mnAdmin = new JMenu("Administracion");
 		menuBar.add(mnAdmin);
-		if (Tienda.getLoginUser().getTipo() == 'A') {
+		if (Tienda.getLoginUser() instanceof Administrador) {
 			mnAdmin.setEnabled(true);
 		} else {
 			mnAdmin.setEnabled(false);

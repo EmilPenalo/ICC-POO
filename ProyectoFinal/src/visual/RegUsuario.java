@@ -8,8 +8,10 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import logico.Administrador;
 import logico.Tienda;
 import logico.Usuario;
+import logico.Vendedor;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -21,6 +23,9 @@ import javax.swing.JPasswordField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.border.TitledBorder;
+import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 public class RegUsuario extends JDialog {
 
@@ -30,7 +35,10 @@ public class RegUsuario extends JDialog {
 	private JTextField txtNombre;
 	private JTextField txtUserName;
 	private JPasswordField txtPassWord;
-	private JComboBox cbxTipo;
+	private JRadioButton rdbtnVendedor;
+	private JRadioButton rdbtnAdmin;
+	private JSpinner spnComision;
+	private JPanel panelVendedor;
 
 	/**
 	 * Launch the application.
@@ -50,7 +58,7 @@ public class RegUsuario extends JDialog {
 	 */
 	public RegUsuario() {
 		setTitle("Registrar Usuario");
-		setBounds(100, 100, 379, 302);
+		setBounds(100, 100, 386, 391);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
@@ -107,14 +115,51 @@ public class RegUsuario extends JDialog {
 			txtPassWord.setBounds(80, 134, 268, 30);
 			panel.add(txtPassWord);
 			
-			JLabel lblNewLabel_4 = new JLabel("Tipo:");
-			lblNewLabel_4.setBounds(15, 180, 46, 20);
-			panel.add(lblNewLabel_4);
+			JPanel panelButtons = new JPanel();
+			panelButtons.setBorder(new TitledBorder(null, "Tipo", TitledBorder.LEFT, TitledBorder.ABOVE_TOP, null, null));
+			panelButtons.setBounds(15, 175, 333, 57);
+			panel.add(panelButtons);
+			panelButtons.setLayout(null);
 			
-			cbxTipo = new JComboBox();
-			cbxTipo.setBounds(80, 175, 146, 30);
-			cbxTipo.setModel(new DefaultComboBoxModel(new String[] {"<Seleccione>", "Vendedor", "Administrador"}));
-			panel.add(cbxTipo);
+			rdbtnVendedor = new JRadioButton("Vendedor");
+			rdbtnVendedor.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					rdbtnVendedor.setSelected(true);
+					rdbtnAdmin.setSelected(false);
+					
+					panelVendedor.setVisible(true);
+				}
+			});
+			rdbtnVendedor.setSelected(true);
+			rdbtnVendedor.setBounds(43, 23, 101, 29);
+			panelButtons.add(rdbtnVendedor);
+			
+			rdbtnAdmin = new JRadioButton("Admin");
+			rdbtnAdmin.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					rdbtnVendedor.setSelected(false);
+					rdbtnAdmin.setSelected(true);
+					
+					panelVendedor.setVisible(false);
+				}
+			});
+			rdbtnAdmin.setBounds(187, 23, 101, 29);
+			panelButtons.add(rdbtnAdmin);
+			
+			panelVendedor = new JPanel();
+			panelVendedor.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panelVendedor.setBounds(15, 237, 333, 55);
+			panel.add(panelVendedor);
+			panelVendedor.setLayout(null);
+			
+			JLabel lblNewLabel_4 = new JLabel("Comision:");
+			lblNewLabel_4.setBounds(15, 16, 90, 20);
+			panelVendedor.add(lblNewLabel_4);
+			
+			spnComision = new JSpinner();
+			spnComision.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+			spnComision.setBounds(85, 11, 146, 30);
+			panelVendedor.add(spnComision);
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -125,14 +170,24 @@ public class RegUsuario extends JDialog {
 				btnRegistar = new JButton("Registrar");
 				btnRegistar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						if (cbxTipo.getSelectedIndex() != 0) {
-							Usuario user = new Usuario(txtId.getText(),txtNombre.getText(),txtUserName.getText(), new String(txtPassWord.getPassword()) ,cbxTipo.getSelectedItem().toString().charAt(0));
-							Tienda.getInstance().insertarUsuario(user);
-							JOptionPane.showMessageDialog(null, "Nuevo usuario registrado con exito","Registrar Usuario", JOptionPane.INFORMATION_MESSAGE);
-							clean();
-						} else {
-							JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo usuario","Informacion", JOptionPane.INFORMATION_MESSAGE);
+						Usuario aux = null;
+						String id = txtId.getText();
+						String nombre = txtNombre.getText();
+						String username = txtUserName.getText();
+						String password = new String(txtPassWord.getPassword());
+						
+						if (rdbtnVendedor.isSelected()) {
+							int comision = new Integer(spnComision.getValue().toString());
+							aux = new Vendedor(id, nombre, username, password, comision);
 						}
+						
+						if (rdbtnAdmin.isSelected()) {
+							aux = new Administrador(id, nombre, username, password);
+						}
+						
+						Tienda.getInstance().insertarUsuario(aux);
+						JOptionPane.showMessageDialog(null, "Nuevo usuario registrado con exito","Registrar Usuario", JOptionPane.INFORMATION_MESSAGE);
+						clean();
 					}
 				});
 				buttonPane.add(btnRegistar);

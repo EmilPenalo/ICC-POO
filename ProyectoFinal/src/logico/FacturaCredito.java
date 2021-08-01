@@ -6,8 +6,8 @@ public class FacturaCredito extends Factura {
 	private int diasCredito;
 	private boolean pendiente;
 	
-	public FacturaCredito(String id, Date fecha, Cliente cliente, int descuento, int diasCredito, boolean pendiente) {
-		super(id, fecha, cliente, descuento);
+	public FacturaCredito(String id, Date fecha, Cliente cliente, int descuento, Vendedor vendedor, int diasCredito, boolean pendiente) {
+		super(id, fecha, cliente, descuento, vendedor);
 		this.diasCredito = diasCredito;
 		this.pendiente = pendiente;
 	}

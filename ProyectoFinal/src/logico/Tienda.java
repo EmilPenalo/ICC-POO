@@ -279,19 +279,20 @@ public class Tienda implements Serializable{
 	public float calcularComisionVendedor(String idVendedor, float comision) {
 		
 		float total = 0;
-		Usuario vendedor=buscarUsuarioById(idVendedor);
+		Usuario user = buscarUsuarioById(idVendedor);
 		
-		if (vendedor != null) {
-			if(vendedor.getTipo() == 'V') {
-				for(Factura f : facturas) {
-					if(f.getId().equalsIgnoreCase(idVendedor)) {
+		if (user != null) {
+			if (user instanceof Vendedor) {
+				for  (Factura f : facturas) {
+					if(f.getVendedor().getId().equalsIgnoreCase(idVendedor)) {
 						total += f.precioTotal();
 					}
 				}
+				return total*(((Vendedor) user).getComision()/100);
 			} else {
 				return -1;
 			}
-			return total*(comision/100);
+
 		} else {
 			return -1;
 		}

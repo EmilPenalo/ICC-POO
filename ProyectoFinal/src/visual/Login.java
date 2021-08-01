@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
+import logico.Administrador;
 import logico.Tienda;
 import logico.Usuario;
 
@@ -64,7 +65,7 @@ public class Login extends JDialog {
 						
 						tiendaOutput = new  FileOutputStream("tienda.dat");
 						writer = new ObjectOutputStream(tiendaOutput);
-						Usuario adminUser = new Usuario("U-" + Usuario.cod, "Administrador", "Admin", "Admin", 'A');
+						Usuario adminUser = new Administrador("U-" + Usuario.cod, "Administrador", "Admin", "Admin");
 						Tienda.getInstance().insertarUsuario(adminUser);
 						writer.writeObject(Tienda.getInstance());
 						

@@ -5,15 +5,17 @@ import java.util.Date;
 
 public class Factura {
 	private String id;
+	private Vendedor vendedor;
 	private Date fecha;
 	private int descuento;
 	private Cliente cliente;
 	private ArrayList<Componente> venta;
 	public static int cod = 1;
 	
-	public Factura(String id, Date fecha, Cliente cliente, int descuento) {
+	public Factura(String id, Date fecha, Cliente cliente, int descuento, Vendedor vendedor) {
 		super();
 		this.id = id;
+		this.vendedor = vendedor;
 		this.fecha = fecha;
 		this.cliente = cliente;
 		this.descuento = descuento;
@@ -27,6 +29,14 @@ public class Factura {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public Vendedor getVendedor() {
+		return vendedor;
+	}
+
+	public void setVendedor(Vendedor vendedor) {
+		this.vendedor = vendedor;
 	}
 
 	public Date getFecha() {
