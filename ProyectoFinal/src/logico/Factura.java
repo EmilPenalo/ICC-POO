@@ -10,17 +10,17 @@ public class Factura implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	private String id;
-	private Vendedor vendedor;
+	private Usuario vendedor;
 	private Date fecha;
 	private int descuento;
 	private Cliente cliente;
 	private ArrayList<Componente> venta;
 	public static int cod = 1;
 	
-	public Factura(String id, Date fecha, Cliente cliente, int descuento, Vendedor vendedor) {
+	public Factura(String id, Cliente cliente, int descuento, Usuario usuario) {
 		super();
 		this.id = id;
-		this.vendedor = vendedor;
+		this.vendedor = usuario;
 		this.fecha = new Date();
 		this.cliente = cliente;
 		this.descuento = descuento;
@@ -36,11 +36,11 @@ public class Factura implements Serializable{
 		this.id = id;
 	}
 
-	public Vendedor getVendedor() {
+	public Usuario getVendedor() {
 		return vendedor;
 	}
 
-	public void setVendedor(Vendedor vendedor) {
+	public void setVendedor(Usuario vendedor) {
 		this.vendedor = vendedor;
 	}
 
