@@ -213,23 +213,27 @@ public class Tienda implements Serializable{
 	}
 	
 	public float calcularEquivalenciaMb(float valor) {
-		
 		return valor*1024;
 	}
 	
-	public static float calcularEquivalenciaMhz(float valor) {
-		 
+	public float calcularEquivalenciaMhz(float valor) {
 		return valor*1000;
 	}
 	
-	public static float calcularEquivalenciaGhz(float valor) {
-		 
+	public float calcularEquivalenciaGhz(float valor) {	 
 		return valor/1000;
 	}
 	
 	public float calcularEquivalenciaTb(float valor) {
-		
 		return valor/1000;
+	}
+	
+	public float calcularEquivalenciaTb_a_Gb(float valor) {
+		return valor*1000;
+	}
+	
+	public float calcularEquivalenciaMb_a_Gb(float valor) {
+		return valor/1024;
 	}
 	
 	public float obtenerPrecioOrdenCompra(String idOrden) {

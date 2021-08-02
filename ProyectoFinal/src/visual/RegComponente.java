@@ -77,6 +77,10 @@ public class RegComponente extends JDialog {
 	private JButton btnDerecha;
 	private JButton btnIzquierda;
 	private JList listDisponible;
+	private JRadioButton rdbtnTb;
+	private JRadioButton rdbtnGbDD;
+	private JRadioButton rdbtnGbRAM;
+	private JRadioButton rdbtnMb;
 
 	/**
 	 * Launch the application.
@@ -119,6 +123,117 @@ public class RegComponente extends JDialog {
 			
 			panelMotherBoard = new JPanel();
 			panelMotherBoard.setVisible(false);
+			
+			panelRAM = new JPanel();
+			panelRAM.setVisible(false);
+			panelRAM.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panelRAM.setBounds(15, 389, 404, 132);
+			panel.add(panelRAM);
+			panelRAM.setLayout(null);
+			
+			JLabel lblNewLabel_3_2 = new JLabel("Cant. Memoria:");
+			lblNewLabel_3_2.setBounds(15, 18, 134, 20);
+			panelRAM.add(lblNewLabel_3_2);
+			
+			spnMemoria = new JSpinner();
+			spnMemoria.setBounds(110, 13, 146, 30);
+			panelRAM.add(spnMemoria);
+			
+			JLabel lblNewLabel_4_2 = new JLabel("Tipo Memoria:");
+			lblNewLabel_4_2.setBounds(15, 56, 109, 20);
+			panelRAM.add(lblNewLabel_4_2);
+			
+			cbxTipoMemoria = new JComboBox();
+			cbxTipoMemoria.setModel(new DefaultComboBoxModel(new String[] {"<Seleccione>", "SRAM", "DRAM", "SDRAM", "SDR SDRAM", "DDR SDRAM", "GDDR SDRAM", "HBM"}));
+			cbxTipoMemoria.setBounds(110, 51, 146, 30);
+			panelRAM.add(cbxTipoMemoria);
+			
+			rdbtnGbRAM = new JRadioButton("Gb");
+			rdbtnGbRAM.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (rdbtnMb.isSelected()) {
+						rdbtnMb.setSelected(false);
+						spnMemoria.setValue(Tienda.getInstance().calcularEquivalenciaMb_a_Gb( new Float(spnMemoria.getValue().toString() )));
+					}
+					rdbtnGbRAM.setSelected(true);
+				}
+			});
+			rdbtnGbRAM.setSelected(true);
+			rdbtnGbRAM.setBounds(267, 14, 59, 29);
+			panelRAM.add(rdbtnGbRAM);
+			
+			rdbtnMb = new JRadioButton("Mb");
+			rdbtnMb.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (rdbtnGbRAM.isSelected()) {
+						rdbtnGbRAM.setSelected(false);
+						spnMemoria.setValue(Tienda.getInstance().calcularEquivalenciaMb( new Float(spnMemoria.getValue().toString() )));
+					}
+					rdbtnMb.setSelected(true);
+				}
+			});
+			rdbtnMb.setBounds(333, 14, 60, 29);
+			panelRAM.add(rdbtnMb);
+			
+			panelDiscoDuro = new JPanel();
+			panelDiscoDuro.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panelDiscoDuro.setBounds(15, 389, 404, 132);
+			panel.add(panelDiscoDuro);
+			panelDiscoDuro.setLayout(null);
+			
+			JLabel lblNewLabel_2 = new JLabel("Modelo:");
+			lblNewLabel_2.setBounds(15, 18, 69, 20);
+			panelDiscoDuro.add(lblNewLabel_2);
+			
+			txtModeloDD = new JTextField();
+			txtModeloDD.setBounds(110, 13, 146, 30);
+			panelDiscoDuro.add(txtModeloDD);
+			txtModeloDD.setColumns(10);
+			
+			JLabel lblNewLabel_3 = new JLabel("Capacidad:");
+			lblNewLabel_3.setBounds(15, 56, 78, 20);
+			panelDiscoDuro.add(lblNewLabel_3);
+			
+			spnCapacidad = new JSpinner();
+			spnCapacidad.setModel(new SpinnerNumberModel(new Float(0), new Float(0), null, new Float(1)));
+			spnCapacidad.setBounds(110, 51, 146, 30);
+			panelDiscoDuro.add(spnCapacidad);
+			
+			JLabel lblNewLabel_4 = new JLabel("Tipo Conexion:");
+			lblNewLabel_4.setBounds(15, 94, 109, 20);
+			panelDiscoDuro.add(lblNewLabel_4);
+			
+			cbxTipoConexion = new JComboBox();
+			cbxTipoConexion.setModel(new DefaultComboBoxModel(new String[] {"<Seleccione>", "IDE", "SCSI", "SATA", "SAS", "PCI-e"}));
+			cbxTipoConexion.setBounds(110, 89, 146, 30);
+			panelDiscoDuro.add(cbxTipoConexion);
+			
+			rdbtnGbDD = new JRadioButton("Gb");
+			rdbtnGbDD.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (rdbtnTb.isSelected()) {
+						rdbtnTb.setSelected(false);
+						spnCapacidad.setValue(Tienda.getInstance().calcularEquivalenciaTb_a_Gb( new Float(spnCapacidad.getValue().toString() )));
+					}
+					rdbtnGbDD.setSelected(true);
+				}
+			});
+			rdbtnGbDD.setSelected(true);
+			rdbtnGbDD.setBounds(267, 52, 59, 29);
+			panelDiscoDuro.add(rdbtnGbDD);
+			
+			rdbtnTb = new JRadioButton("Tb");
+			rdbtnTb.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (rdbtnGbDD.isSelected()) {
+						rdbtnGbDD.setSelected(false);
+						spnCapacidad.setValue(Tienda.getInstance().calcularEquivalenciaTb( new Float(spnCapacidad.getValue().toString() )));
+					}
+					rdbtnTb.setSelected(true);
+				}
+			});
+			rdbtnTb.setBounds(333, 52, 60, 29);
+			panelDiscoDuro.add(rdbtnTb);
 			panelMotherBoard.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			panelMotherBoard.setBounds(15, 389, 404, 252);
 			panel.add(panelMotherBoard);
@@ -228,39 +343,6 @@ public class RegComponente extends JDialog {
 			JLabel lblNewLabel_6 = new JLabel("Seleccionadas:");
 			lblNewLabel_6.setBounds(245, 130, 144, 20);
 			panelMotherBoard.add(lblNewLabel_6);
-			
-			panelDiscoDuro = new JPanel();
-			panelDiscoDuro.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panelDiscoDuro.setBounds(15, 389, 404, 132);
-			panel.add(panelDiscoDuro);
-			panelDiscoDuro.setLayout(null);
-			
-			JLabel lblNewLabel_2 = new JLabel("Modelo:");
-			lblNewLabel_2.setBounds(15, 18, 69, 20);
-			panelDiscoDuro.add(lblNewLabel_2);
-			
-			txtModeloDD = new JTextField();
-			txtModeloDD.setBounds(110, 13, 146, 30);
-			panelDiscoDuro.add(txtModeloDD);
-			txtModeloDD.setColumns(10);
-			
-			JLabel lblNewLabel_3 = new JLabel("Capacidad:");
-			lblNewLabel_3.setBounds(15, 56, 78, 20);
-			panelDiscoDuro.add(lblNewLabel_3);
-			
-			spnCapacidad = new JSpinner();
-			spnCapacidad.setModel(new SpinnerNumberModel(new Float(0), new Float(0), null, new Float(1)));
-			spnCapacidad.setBounds(110, 51, 146, 30);
-			panelDiscoDuro.add(spnCapacidad);
-			
-			JLabel lblNewLabel_4 = new JLabel("Tipo Conexion:");
-			lblNewLabel_4.setBounds(15, 94, 109, 20);
-			panelDiscoDuro.add(lblNewLabel_4);
-			
-			cbxTipoConexion = new JComboBox();
-			cbxTipoConexion.setModel(new DefaultComboBoxModel(new String[] {"<Seleccione>", "IDE", "SCSI", "SATA", "SAS", "PCI-e"}));
-			cbxTipoConexion.setBounds(110, 89, 146, 30);
-			panelDiscoDuro.add(cbxTipoConexion);
 			
 			JLabel lblCodigo = new JLabel("Codigo:");
 			lblCodigo.setBounds(15, 20, 69, 20);
@@ -425,30 +507,6 @@ public class RegComponente extends JDialog {
 				panelButtons.add(rdbtnRAM);
 			}
 			
-			panelRAM = new JPanel();
-			panelRAM.setVisible(false);
-			panelRAM.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panelRAM.setBounds(15, 389, 404, 132);
-			panel.add(panelRAM);
-			panelRAM.setLayout(null);
-			
-			JLabel lblNewLabel_3_2 = new JLabel("Cant. Memoria:");
-			lblNewLabel_3_2.setBounds(15, 18, 134, 20);
-			panelRAM.add(lblNewLabel_3_2);
-			
-			spnMemoria = new JSpinner();
-			spnMemoria.setBounds(110, 13, 146, 30);
-			panelRAM.add(spnMemoria);
-			
-			JLabel lblNewLabel_4_2 = new JLabel("Tipo Memoria:");
-			lblNewLabel_4_2.setBounds(15, 56, 109, 20);
-			panelRAM.add(lblNewLabel_4_2);
-			
-			cbxTipoMemoria = new JComboBox();
-			cbxTipoMemoria.setModel(new DefaultComboBoxModel(new String[] {"<Seleccione>", "SRAM", "DRAM", "SDRAM", "SDR SDRAM", "DDR SDRAM", "GDDR SDRAM", "HBM"}));
-			cbxTipoMemoria.setBounds(110, 51, 146, 30);
-			panelRAM.add(cbxTipoMemoria);
-			
 			panelMicro = new JPanel();
 			panelMicro.setVisible(false);
 			panelMicro.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -479,7 +537,7 @@ public class RegComponente extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					if (rdbtnMhz.isSelected()) {
 						rdbtnMhz.setSelected(false);
-						spnVelocidad.setValue(Tienda.calcularEquivalenciaGhz( new Float(spnVelocidad.getValue().toString() )));
+						spnVelocidad.setValue(Tienda.getInstance().calcularEquivalenciaGhz( new Float(spnVelocidad.getValue().toString() )));
 					}
 					rdbtnGhz.setSelected(true);
 				}
@@ -493,7 +551,7 @@ public class RegComponente extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					if (rdbtnGhz.isSelected()) {
 						rdbtnGhz.setSelected(false);
-						spnVelocidad.setValue(Tienda.calcularEquivalenciaMhz( new Float(spnVelocidad.getValue().toString() )));
+						spnVelocidad.setValue(Tienda.getInstance().calcularEquivalenciaMhz( new Float(spnVelocidad.getValue().toString() )));
 					}
 					rdbtnMhz.setSelected(true);
 				}
@@ -540,6 +598,10 @@ public class RegComponente extends JDialog {
 								float capacidad = new Float(spnCapacidad.getValue().toString());
 								String modelo = txtModeloDD.getText();
 								
+								if (rdbtnTb.isSelected()) {
+									capacidad = Tienda.getInstance().calcularEquivalenciaTb_a_Gb(capacidad);
+								}
+								
 								if (cbxTipoConexion.getSelectedIndex() != 0) {
 									String tipoConexion = cbxTipoConexion.getSelectedItem().toString();
 									aux = new DiscoDuro(id, marca, serial, precio, cantMin, cantMax, cantReal, capacidad, modelo, tipoConexion);
@@ -552,6 +614,10 @@ public class RegComponente extends JDialog {
 							
 							if (rdbtnRAM.isSelected()) {
 								float cantMemoria = new Float(spnMemoria.getValue().toString());
+								
+								if (rdbtnMb.isSelected()) {
+									cantMemoria = Tienda.getInstance().calcularEquivalenciaMb_a_Gb(cantMemoria);
+								}
 								
 								if (cbxTipoMemoria.getSelectedIndex() != 0) {
 									String tipoMemoria = cbxTipoMemoria.getSelectedItem().toString();
@@ -569,7 +635,7 @@ public class RegComponente extends JDialog {
 								float velocidad = new Float(spnVelocidad.getValue().toString());
 								
 								if (rdbtnMhz.isSelected()) {
-									velocidad = Tienda.calcularEquivalenciaGhz(velocidad);
+									velocidad = Tienda.getInstance().calcularEquivalenciaGhz(velocidad);
 								}
 								
 								if (cbxTipoSocketMicro.getSelectedIndex() != 0) {
@@ -656,7 +722,7 @@ public class RegComponente extends JDialog {
 									float velocidad = new Float(spnVelocidad.getValue().toString());
 									
 									if (rdbtnMhz.isSelected()) {
-										velocidad = Tienda.calcularEquivalenciaGhz(velocidad);
+										velocidad = Tienda.getInstance().calcularEquivalenciaGhz(velocidad);
 									}
 									((MicroProcesador) selected).setVelocidad(velocidad);
 
