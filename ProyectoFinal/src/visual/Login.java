@@ -58,6 +58,8 @@ public class Login extends JDialog {
 					tiendaInput.close();
 					reader.close();
 					
+					Tienda.getInstance().loadCodigos();
+					
 				} catch (FileNotFoundException e) {
 					
 					// Creando tienda.dat si no existe con un usuario default

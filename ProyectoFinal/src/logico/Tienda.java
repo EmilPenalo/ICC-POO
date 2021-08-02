@@ -15,6 +15,13 @@ public class Tienda implements Serializable{
 	private ArrayList<OrdenCompra> ordenesCompra;
 	private ArrayList<Combo> combos;
 	
+	private int codUsuario;
+	private int codComponente;
+	private int codCombo;
+	private int codFactura;
+	private int codOrden;
+	private int codSumi;
+	
 	private static Usuario loginUser;
 	private static Tienda shop = null;
 		
@@ -445,5 +452,23 @@ public class Tienda implements Serializable{
 			c.setCantReal(c.getCantReal() + orden.getCantUnidades());
 		}
 		orden.setPendiente(false);
+	}
+
+	public void updateCodigos() {
+		codUsuario = Usuario.cod;
+		codComponente = Componente.cod;
+		codCombo = Combo.cod;
+		codFactura = Factura.cod;
+		codOrden = OrdenCompra.cod;
+		codSumi = Suministrador.cod;
+	}
+
+	public void loadCodigos() {
+		Usuario.cod = codUsuario;
+		Componente.cod = codComponente;
+		Combo.cod = codCombo;
+		Factura.cod = codFactura;
+		OrdenCompra.cod = codOrden;
+		Suministrador.cod = codSumi;
 	}
 }

@@ -58,6 +58,8 @@ public class Principal extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
+				
+				Tienda.getInstance().updateCodigos();
 				FileOutputStream tiendaOutput;
 				ObjectOutputStream writer;
 				
