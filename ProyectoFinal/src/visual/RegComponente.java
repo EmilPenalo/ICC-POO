@@ -136,6 +136,7 @@ public class RegComponente extends JDialog {
 			panelRAM.add(lblNewLabel_3_2);
 			
 			spnMemoria = new JSpinner();
+			spnMemoria.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
 			spnMemoria.setBounds(110, 13, 146, 30);
 			panelRAM.add(spnMemoria);
 			
@@ -528,7 +529,7 @@ public class RegComponente extends JDialog {
 			panelMicro.add(lblNewLabel_3_1);
 			
 			spnVelocidad = new JSpinner();
-			spnVelocidad.setModel(new SpinnerNumberModel(new Float(1), new Float(0), null, new Float(1)));
+			spnVelocidad.setModel(new SpinnerNumberModel(new Float(0), new Float(0), null, new Float(1)));
 			spnVelocidad.setBounds(110, 51, 146, 30);
 			panelMicro.add(spnVelocidad);
 			

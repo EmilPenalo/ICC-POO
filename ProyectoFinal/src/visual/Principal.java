@@ -96,9 +96,9 @@ public class Principal extends JFrame {
 		JMenuItem mntmHacerVentas = new JMenuItem("Hacer Venta");
 		mntmHacerVentas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				RegCliente temp = new RegCliente(null);
-				temp.setModal(true);
-				temp.setVisible(true);
+				HacerVenta venta = new HacerVenta();
+				venta.setModal(true);
+				venta.setVisible(true);
 			}
 		});
 		mnVentas.add(mntmHacerVentas);
