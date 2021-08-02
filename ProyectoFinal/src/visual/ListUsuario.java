@@ -85,7 +85,7 @@ public class ListUsuario extends JDialog {
 							if (index != -1) {
 								btnEliminar.setEnabled(true);
 
-								String id = (String)(model.getValueAt(index, 1));
+								String id = (String)(model.getValueAt(index, 0));
 								selected = Tienda.getInstance().buscarUsuarioById(id);
 							}
 						}
@@ -114,7 +114,9 @@ public class ListUsuario extends JDialog {
 						public void actionPerformed(ActionEvent e) {
 							int option = JOptionPane.showConfirmDialog(null, "Desea eliminar el usuario seleccionado: " + selected.getId() + "|" + selected.getNombre() + "?", "Eliminar usuario", JOptionPane.YES_NO_OPTION);
 							if (option == JOptionPane.YES_OPTION) {
-								Tienda.getInstance().eliminarUsuario(selected);
+								if (!Tienda.getInstance().eliminarUsuario(selected)) {
+									JOptionPane.showMessageDialog(null, "Debe haber por lo menos un Usuario registrado", "Eliminar Usuario", JOptionPane.WARNING_MESSAGE);
+								}
 								loadTable();
 							}
 							

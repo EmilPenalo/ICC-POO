@@ -377,8 +377,12 @@ public class Tienda implements Serializable{
 		inventario.remove(selected);
 	}
 
-	public void eliminarUsuario(Usuario selected) {
-		usuarios.remove(selected);
+	public boolean eliminarUsuario(Usuario selected) {
+		if (usuarios.size() - 1 > 0) {
+			usuarios.remove(selected);
+			return true;
+		}
+		return false;
 	}
 
 	public void insertarOrdenCompra(OrdenCompra nuevaorden) {

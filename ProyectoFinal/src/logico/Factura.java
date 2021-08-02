@@ -21,7 +21,7 @@ public class Factura implements Serializable{
 		super();
 		this.id = id;
 		this.vendedor = vendedor;
-		this.fecha = fecha;
+		this.fecha = new Date();
 		this.cliente = cliente;
 		this.descuento = descuento;
 		this.venta = new ArrayList<>();

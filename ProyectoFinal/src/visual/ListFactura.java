@@ -20,6 +20,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import javax.swing.border.TitledBorder;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JLabel;
@@ -172,7 +175,10 @@ public class ListFactura extends JDialog {
 					rows[1] = f.getCliente().getNombre();
 					rows[2] = f.precioTotal();
 					rows[3] = f.getDescuento();
-					rows[4] = f.getFecha();
+					
+					DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");  
+					String strFecha = dateFormat.format(f.getFecha()); 
+					rows[4] = strFecha;
 					
 					model.addRow(rows);
 				}
@@ -183,7 +189,10 @@ public class ListFactura extends JDialog {
 						rows[1] = f.getCliente().getNombre();
 						rows[2] = f.precioTotal();
 						rows[3] = f.getDescuento();
-						rows[4] = f.getFecha();
+						
+						DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");  
+						String strFecha = dateFormat.format(f.getFecha()); 
+						rows[4] = strFecha;
 						
 						model.addRow(rows);
 					}
@@ -202,7 +211,10 @@ public class ListFactura extends JDialog {
 							rows[1] = f.getCliente().getNombre();
 							rows[2] = f.precioTotal();
 							rows[3] = f.getDescuento();
-							rows[4] = f.getFecha();
+
+							DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");  
+							String strFecha = dateFormat.format(f.getFecha()); 
+							rows[4] = strFecha;
 							
 							model.addRow(rows);
 						}
@@ -219,7 +231,10 @@ public class ListFactura extends JDialog {
 								rows[1] = f.getCliente().getNombre();
 								rows[2] = f.precioTotal();
 								rows[3] = f.getDescuento();
-								rows[4] = f.getFecha();
+
+								DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");  
+								String strFecha = dateFormat.format(f.getFecha()); 
+								rows[4] = strFecha;
 								
 								model.addRow(rows);
 							}
@@ -240,7 +255,10 @@ public class ListFactura extends JDialog {
 							rows[1] = f.getCliente().getNombre();
 							rows[2] = f.precioTotal();
 							rows[3] = f.getDescuento();
-							rows[4] = f.getFecha();
+
+							DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");  
+							String strFecha = dateFormat.format(f.getFecha()); 
+							rows[4] = strFecha;
 							
 							model.addRow(rows);
 						}
@@ -250,7 +268,10 @@ public class ListFactura extends JDialog {
 						rows[1] = f.getCliente().getNombre();
 						rows[2] = f.precioTotal();
 						rows[3] = f.getDescuento();
-						rows[4] = f.getFecha();
+
+						DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");  
+						String strFecha = dateFormat.format(f.getFecha()); 
+						rows[4] = strFecha;
 						
 						model.addRow(rows);
 					}
@@ -266,7 +287,10 @@ public class ListFactura extends JDialog {
 								rows[1] = f.getCliente().getNombre();
 								rows[2] = f.precioTotal();
 								rows[3] = f.getDescuento();
-								rows[4] = f.getFecha();
+
+								DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");  
+								String strFecha = dateFormat.format(f.getFecha()); 
+								rows[4] = strFecha;
 								
 								model.addRow(rows);
 							}
@@ -276,7 +300,10 @@ public class ListFactura extends JDialog {
 							rows[1] = f.getCliente().getNombre();
 							rows[2] = f.precioTotal();
 							rows[3] = f.getDescuento();
-							rows[4] = f.getFecha();
+							
+							DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");  
+							String strFecha = dateFormat.format(f.getFecha()); 
+							rows[4] = strFecha;
 							
 							model.addRow(rows);
 						}

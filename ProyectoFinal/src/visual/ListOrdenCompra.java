@@ -20,6 +20,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class ListOrdenCompra extends JDialog {
 
@@ -134,14 +136,19 @@ public class ListOrdenCompra extends JDialog {
 	public static void loadTable() {
 		model.setRowCount(0);
 		rows = new Object[model.getColumnCount()];
-		for(OrdenCompra ord:Tienda.getInstance().getOrdenesCompra()) {
+		for (OrdenCompra ord:Tienda.getInstance().getOrdenesCompra()) {
 			rows[0] = ord.getId();
 			rows[1] = ord.getSuministrador().getNombre();
 			rows[2] = ord.getComponentes().size();
 			rows[3] = ord.getCantUnidades();
-			rows[4] = ord.getFecha();
+			
+			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");  
+			String strFecha = dateFormat.format(ord.getFecha()); 
+			rows[4] = strFecha;
+
 			model.addRow(rows);
 		}
+		
 		btnModificar.setEnabled(false);
 		btnEliminar.setEnabled(false);
 	}
