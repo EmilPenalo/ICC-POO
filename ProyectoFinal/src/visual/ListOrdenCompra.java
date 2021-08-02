@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import logico.Combo;
 import logico.OrdenCompra;
 import logico.Tienda;
 
@@ -22,6 +21,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import javax.swing.border.TitledBorder;
+import javax.swing.JLabel;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class ListOrdenCompra extends JDialog {
 
@@ -30,8 +33,11 @@ public class ListOrdenCompra extends JDialog {
 	private static DefaultTableModel model;
 	private static Object[] rows;
 	private OrdenCompra selected;
-	private static JButton btnEliminar;
-	private static JButton btnModificar;
+	private JButton btnEliminar;
+	private JButton btnModificar;
+	private JButton btnPedido;
+	private JPanel panel;
+	private JComboBox<String> cbxFiltro;
 
 	/**
 	 * Launch the application.
@@ -51,17 +57,18 @@ public class ListOrdenCompra extends JDialog {
 	 */
 	public ListOrdenCompra() {
 		setTitle("Listar Orden de Compra");
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 443, 400);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(new BorderLayout(0, 0));
+		contentPanel.setLayout(null);
 		{
 			JScrollPane scrollPane = new JScrollPane();
-			contentPanel.add(scrollPane, BorderLayout.CENTER);
+			scrollPane.setBounds(5, 50, 418, 267);
+			contentPanel.add(scrollPane);
 			{
-				String[] headers={"Id","Suministrador","Cant. Componentes","Cant. Unidades","Fecha"};
+				String[] headers = {"Id","Suministrador","Cant. Componentes","Cant. Unidades","Fecha"};
 				model=new DefaultTableModel();
 				model.setColumnIdentifiers(headers);
 				table = new JTable();
@@ -72,10 +79,18 @@ public class ListOrdenCompra extends JDialog {
 						index = table.getSelectedRow();
 						if(index != -1)
 						{
-							btnModificar.setEnabled(true);
 							btnEliminar.setEnabled(true);
+							
 							String id = model.getValueAt(index,0).toString();
 							selected = Tienda.getInstance().buscarOrdenById(id);
+							
+							if (selected.isPendiente()) {
+								btnPedido.setEnabled(true);
+								btnModificar.setEnabled(true);
+							} else {
+								btnPedido.setEnabled(false);
+								btnModificar.setEnabled(false);
+							}
 						}
 					}
 				});
@@ -84,26 +99,54 @@ public class ListOrdenCompra extends JDialog {
 			}
 		}
 		{
+			panel = new JPanel();
+			panel.setBounds(5, 5, 418, 42);
+			panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			contentPanel.add(panel);
+			panel.setLayout(null);
+			
+			JLabel lblNewLabel = new JLabel("Filtro:");
+			lblNewLabel.setBounds(15, 11, 69, 20);
+			panel.add(lblNewLabel);
+			
+			cbxFiltro = new JComboBox<String>();
+			cbxFiltro.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					loadTable(cbxFiltro.getSelectedIndex());
+					
+					btnEliminar.setEnabled(false);
+					btnModificar.setEnabled(false);
+					btnPedido.setEnabled(false);
+				}
+			});
+			cbxFiltro.setModel(new DefaultComboBoxModel<String>(new String[] {"<Seleccione>", "Pendientes", "Completas"}));
+			cbxFiltro.setBounds(68, 6, 150, 30);
+			panel.add(cbxFiltro);
+		}
+		{
 			JPanel buttonPane = new JPanel();
+			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				btnEliminar = new JButton("Eliminar");
-				btnEliminar.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						int option = JOptionPane.showConfirmDialog(null, "Desea eliminar la orden seleccionada: " + selected.getId() + "?", "Eliminar Orden de Compra", JOptionPane.YES_NO_OPTION);
-						if (option == JOptionPane.YES_OPTION) {
-							Tienda.getInstance().eliminarOrdenCompra(selected);
-							loadTable();
+				{
+					btnPedido = new JButton("Hacer Pedido");
+					btnPedido.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent arg0) {
+							int option = JOptionPane.showConfirmDialog(null, "Desea finalizar el pedido de la orden seleccionada: " + selected.getId() + "?", "Hacer Pedido", JOptionPane.YES_NO_OPTION);
+							if (option == JOptionPane.YES_OPTION) {
+								Tienda.getInstance().finalizarOrden(selected);
+								loadTable(cbxFiltro.getSelectedIndex());
+							}
+							
+							btnEliminar.setEnabled(false);
+							btnModificar.setEnabled(false);
+							btnPedido.setEnabled(false);
 						}
-						
-						btnEliminar.setEnabled(false);
-						btnModificar.setEnabled(false);
-
-					}
-				});
-				btnEliminar.setEnabled(false);
-				buttonPane.add(btnEliminar);
+					});
+					btnPedido.setEnabled(false);
+					buttonPane.add(btnPedido);
+				}
 			}
 			{
 				btnModificar = new JButton("Modificar");
@@ -112,6 +155,10 @@ public class ListOrdenCompra extends JDialog {
 						RegOrdenCompra modOrden = new RegOrdenCompra(selected);
 						modOrden.setModal(true);
 						modOrden.setVisible(true);
+						
+						btnPedido.setEnabled(false);
+						btnEliminar.setEnabled(false);
+						btnModificar.setEnabled(false);
 					}
 				});
 				btnModificar.setEnabled(false);
@@ -126,31 +173,83 @@ public class ListOrdenCompra extends JDialog {
 						dispose();
 					}
 				});
+				btnEliminar = new JButton("Eliminar");
+				btnEliminar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						int option = JOptionPane.showConfirmDialog(null, "Desea eliminar la orden seleccionada: " + selected.getId() + "?", "Eliminar Orden de Compra", JOptionPane.YES_NO_OPTION);
+						if (option == JOptionPane.YES_OPTION) {
+							Tienda.getInstance().eliminarOrdenCompra(selected);
+							loadTable(cbxFiltro.getSelectedIndex());
+						}
+						
+						btnEliminar.setEnabled(false);
+						btnModificar.setEnabled(false);
+						btnPedido.setEnabled(false);
+
+					}
+				});
+				btnEliminar.setEnabled(false);
+				buttonPane.add(btnEliminar);
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
 		}
-		loadTable();
+		loadTable(0);
 	}
 
-	public static void loadTable() {
+	public static void loadTable(int sel) {
 		model.setRowCount(0);
 		rows = new Object[model.getColumnCount()];
-		for (OrdenCompra ord:Tienda.getInstance().getOrdenesCompra()) {
-			rows[0] = ord.getId();
-			rows[1] = ord.getSuministrador().getNombre();
-			rows[2] = ord.getComponentes().size();
-			rows[3] = ord.getCantUnidades();
-			
-			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");  
-			String strFecha = dateFormat.format(ord.getFecha()); 
-			rows[4] = strFecha;
-
-			model.addRow(rows);
-		}
 		
-		btnModificar.setEnabled(false);
-		btnEliminar.setEnabled(false);
-	}
+		switch (sel) {
+		case 0:
+			for (OrdenCompra ord : Tienda.getInstance().getOrdenesCompra()) {
+				rows[0] = ord.getId();
+				rows[1] = ord.getSuministrador().getNombre();
+				rows[2] = ord.getComponentes().size();
+				rows[3] = ord.getCantUnidades();
+				
+				DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");  
+				String strFecha = dateFormat.format(ord.getFecha()); 
+				rows[4] = strFecha;
 
+				model.addRow(rows);
+			}
+			break;
+
+		case 1:
+			for (OrdenCompra ord : Tienda.getInstance().getOrdenesCompra()) {
+				if (ord.isPendiente()) {
+					rows[0] = ord.getId();
+					rows[1] = ord.getSuministrador().getNombre();
+					rows[2] = ord.getComponentes().size();
+					rows[3] = ord.getCantUnidades();
+					
+					DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");  
+					String strFecha = dateFormat.format(ord.getFecha()); 
+					rows[4] = strFecha;
+
+					model.addRow(rows);
+				}
+			}
+			break;
+			
+		case 2:
+			for (OrdenCompra ord : Tienda.getInstance().getOrdenesCompra()) {
+				if (!ord.isPendiente()) {
+					rows[0] = ord.getId();
+					rows[1] = ord.getSuministrador().getNombre();
+					rows[2] = ord.getComponentes().size();
+					rows[3] = ord.getCantUnidades();
+					
+					DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");  
+					String strFecha = dateFormat.format(ord.getFecha()); 
+					rows[4] = strFecha;
+
+					model.addRow(rows);
+				}
+			}
+			break;
+		}
+	}
 }

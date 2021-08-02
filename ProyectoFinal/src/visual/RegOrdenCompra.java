@@ -239,7 +239,7 @@ public class RegOrdenCompra extends JDialog {
 									 selected.setComponentes(componentes);
 									 
 									 JOptionPane.showMessageDialog(null,"Se ha modificado la orden","Modificacion de Orden",JOptionPane.INFORMATION_MESSAGE);
-									 ListOrdenCompra.loadTable();
+									 ListOrdenCompra.loadTable(0);
 									 dispose();
 								 } 
 							 } else {
@@ -275,7 +275,6 @@ public class RegOrdenCompra extends JDialog {
 		if (selected != null) {
 			txtId.setText(selected.getId());
 			cbxSumi.setSelectedItem(selected.getSuministrador().getId());
-			System.out.println(selected.getSuministrador().getId());
 			spnCantUnidad.setValue(selected.getCantUnidades());
 			
 			if (selected != null) {

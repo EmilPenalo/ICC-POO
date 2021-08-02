@@ -426,4 +426,24 @@ public class Tienda implements Serializable{
 		f.setPendiente(false);
 		f.getCliente().setCreditoEnUso(f.getCliente().getCreditoEnUso() - f.precioTotal());
 	}
+	
+	public void checkDisponibilidadComponente(Componente c) {
+		if (c.getCantReal() < c.getCantMin()) {
+			for (Suministrador sumi : suministradores) {
+				if (sumi.getComponentes().contains(c)) {
+					OrdenCompra orden = new OrdenCompra("OC-" + OrdenCompra.cod, sumi, c.getCantMax() - c.getCantReal());
+					orden.addComponente(c);
+					ordenesCompra.add(orden);
+					break;
+				}
+			}
+		}
+	}
+
+	public void finalizarOrden(OrdenCompra orden) {
+		for (Componente c : orden.getComponentes()) {
+			c.setCantReal(c.getCantReal() + orden.getCantUnidades());
+		}
+		orden.setPendiente(false);
+	}
 }

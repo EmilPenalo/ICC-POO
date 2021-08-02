@@ -14,15 +14,17 @@ public class OrdenCompra implements Serializable{
 	private ArrayList<Componente> componentes;
 	private int cantUnidades;
 	private Date fecha;
+	private boolean pendiente;
 	public static int cod=1; 
 	
 	public OrdenCompra(String id, Suministrador suministrador, int cantUnidades) {
 		super();
 		this.id = id;
 		this.suministrador = suministrador;
-		this.componentes=new ArrayList<Componente>();
+		this.componentes = new ArrayList<Componente>();
 		this.cantUnidades = cantUnidades;
 		this.fecha = new Date();
+		this.setPendiente(true);
 		cod++;
 	}
 
@@ -58,6 +60,14 @@ public class OrdenCompra implements Serializable{
 		this.cantUnidades = cantUnidades;
 	}
 
+	public boolean isPendiente() {
+		return pendiente;
+	}
+
+	public void setPendiente(boolean pendiente) {
+		this.pendiente = pendiente;
+	}
+
 	public Date getFecha() {
 		return fecha;
 	}
@@ -72,6 +82,10 @@ public class OrdenCompra implements Serializable{
 
 	public static void setCod(int cod) {
 		OrdenCompra.cod = cod;
+	}
+	
+	public void addComponente(Componente c) {
+		componentes.add(c);
 	}
 	
 	public float precioTotal() {
