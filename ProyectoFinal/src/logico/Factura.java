@@ -1,6 +1,8 @@
 package logico;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -106,5 +108,50 @@ public class Factura implements Serializable{
 		
 		total -= total*((float)descuento/100);
 		return total;
+	}
+	
+	public String toText() {
+		String text = new String();
+		
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");  
+		String strFecha = dateFormat.format(fecha);  
+		
+		text = "ID: " + id + "\n";
+		text += "Fecha: " + strFecha + "\n";
+		text += "Cliente: " + cliente.getNombre() + "\n";
+		text += "Vendedor: " + vendedor.getNombre() + "\n";
+		text += "\nComponentes: \n";
+		
+		text += "\tID Componente     Tipo           Precio\n";
+		for (Componente c : venta) {
+			
+			String tipo = null;
+			if (c instanceof Ram) {
+				tipo = new String ("RAM");
+			}
+			if (c instanceof MotherBoard) {
+				tipo = new String("MotherBoard");
+			}
+			if (c instanceof MicroProcesador) {
+				tipo = new String("Micro");
+			}
+			if (c instanceof DiscoDuro) {
+				tipo = new String("Disco Duro");
+			}
+			
+			text += String.format("\t %-18s%-15s%-10.4f\n", c.getId(), tipo, c.getPrecio());
+		}
+		
+		text += "\nCombos: \n";
+		
+		text += "\tID Combo          Descuento      Precio\n";
+		for (Combo c : ventaCombos) {
+			text += String.format("\t %-18s%-12d   %-10.4f\n", c.getId(), c.getDescuento(), c.precio());
+		}
+		
+		text += "\n";
+		text += "Total: $" + precioTotal();
+		
+		return text;
 	}
 }

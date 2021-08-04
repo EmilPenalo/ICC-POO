@@ -40,6 +40,7 @@ public class ListFactura extends JDialog {
 	private static Cliente cliente = null;
 	private JComboBox<String> cbxFiltro;
 	private JButton btnCompletar;
+	private JButton btnInfo;
 
 	/**
 	 * Launch the application.
@@ -91,6 +92,7 @@ public class ListFactura extends JDialog {
 					if(index != -1) {
  							String id = (String)(model.getValueAt(index,0));
 						selected = Tienda.getInstance().buscarFacturaById(id);
+						btnInfo.setEnabled(true);
 						
 						if (selected instanceof FacturaCredito) {
 							if (((FacturaCredito) selected).isPendiente()) {
@@ -121,6 +123,7 @@ public class ListFactura extends JDialog {
 			cbxFiltro.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					btnCompletar.setEnabled(false);
+					btnInfo.setEnabled(false);
 					loadTable(cbxFiltro.getSelectedIndex());
 				}
 			});
@@ -152,8 +155,20 @@ public class ListFactura extends JDialog {
 						}
 						
 						btnCompletar.setEnabled(false);
+						btnInfo.setEnabled(false);
 					}
 				});
+				
+				btnInfo = new JButton("Info");
+				btnInfo.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						JOptionPane.showMessageDialog(null, selected.toText(), "Factura", JOptionPane.INFORMATION_MESSAGE);
+						btnCompletar.setEnabled(false);
+						btnInfo.setEnabled(false);
+					}
+				});
+				btnInfo.setEnabled(false);
+				buttonPane.add(btnInfo);
 				buttonPane.add(btnCompletar);
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
