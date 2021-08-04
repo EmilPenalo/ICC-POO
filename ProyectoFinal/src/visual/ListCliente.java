@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 
 import logico.Cliente;
 import logico.Tienda;
+import logico.Vendedor;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -75,7 +76,7 @@ public class ListCliente extends JDialog {
 						index = table.getSelectedRow();
 						if(index != -1) {
 							btnModificar.setEnabled(true);
-							btnEliminar.setEnabled(true);
+							checkUser();
 							btnHistorial.setEnabled(true);
 							String cedula = (String)(model.getValueAt(index,0));
 							selected = Tienda.getInstance().buscarClienteByCedula(cedula);
@@ -155,6 +156,15 @@ public class ListCliente extends JDialog {
 		}
 		loadTable();
 	}
+	private void checkUser() {
+		if(Tienda.getLoginUser() instanceof Vendedor) {
+			btnEliminar.setEnabled(false);
+		}else {
+			btnEliminar.setEnabled(true);
+		}
+		
+	}
+
 	public static void loadTable() {
 		model.setRowCount(0);
 		rows=new Object[model.getColumnCount()];

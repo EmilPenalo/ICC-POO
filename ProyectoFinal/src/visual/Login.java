@@ -67,7 +67,7 @@ public class Login extends JDialog {
 						
 						tiendaOutput = new  FileOutputStream("tienda.dat");
 						writer = new ObjectOutputStream(tiendaOutput);
-						Usuario adminUser = new Administrador("U-0", "Administrador", "Admin", "Admin");
+						Usuario adminUser = new Administrador("U-0", "Administrador", "Admin", "Admin",0);
 						Tienda.getInstance().insertarUsuario(adminUser);
 						writer.writeObject(Tienda.getInstance());
 						
