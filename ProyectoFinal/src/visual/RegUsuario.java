@@ -39,6 +39,9 @@ public class RegUsuario extends JDialog {
 	private JRadioButton rdbtnAdmin;
 	private JSpinner spnComision;
 	private JPanel panelVendedor;
+	private JLabel lblNewLabel_5;
+	private JSpinner spnSalario;
+	private JPanel panelAdmin;
 
 	/**
 	 * Launch the application.
@@ -128,6 +131,7 @@ public class RegUsuario extends JDialog {
 					rdbtnAdmin.setSelected(false);
 					
 					panelVendedor.setVisible(true);
+					panelAdmin.setVisible(false);
 				}
 			});
 			rdbtnVendedor.setSelected(true);
@@ -141,6 +145,7 @@ public class RegUsuario extends JDialog {
 					rdbtnAdmin.setSelected(true);
 					
 					panelVendedor.setVisible(false);
+					panelAdmin.setVisible(true);
 				}
 			});
 			rdbtnAdmin.setBounds(187, 23, 101, 29);
@@ -160,6 +165,24 @@ public class RegUsuario extends JDialog {
 			spnComision.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
 			spnComision.setBounds(85, 11, 146, 30);
 			panelVendedor.add(spnComision);
+			{
+				panelAdmin = new JPanel();
+				panelAdmin.setLayout(null);
+				panelAdmin.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+				panelAdmin.setBounds(15, 237, 333, 55);
+				panel.add(panelAdmin);
+				{
+					lblNewLabel_5 = new JLabel("Salario:");
+					lblNewLabel_5.setBounds(15, 16, 90, 20);
+					panelAdmin.add(lblNewLabel_5);
+				}
+				{
+					spnSalario = new JSpinner();
+					spnSalario.setModel(new SpinnerNumberModel(new Float(0), new Float(0), null, new Float(1)));
+					spnSalario.setBounds(85, 11, 146, 30);
+					panelAdmin.add(spnSalario);
+				}
+			}
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -182,7 +205,8 @@ public class RegUsuario extends JDialog {
 						}
 						
 						if (rdbtnAdmin.isSelected()) {
-							aux = new Administrador(id, nombre, username, password);
+							float salario = new Float(spnSalario.getValue().toString());
+							aux = new Administrador(id, nombre, username, password, salario);
 						}
 						
 						Tienda.getInstance().insertarUsuario(aux);
@@ -210,5 +234,7 @@ public class RegUsuario extends JDialog {
 		txtNombre.setText("");
 		txtUserName.setText("");
 		txtPassWord.setText("");
+		spnComision.setValue(0);
+		spnSalario.setValue(0);
 	}
 }

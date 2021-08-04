@@ -91,6 +91,8 @@ public class ListUsuario extends JDialog {
 								
 								if (selected instanceof Vendedor) {
 									btnInfo.setEnabled(true);
+								} else {
+									btnInfo.setEnabled(false);
 								}
 							}
 						}
