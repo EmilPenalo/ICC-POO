@@ -85,6 +85,7 @@ public class Factura implements Serializable{
 		for (Componente c : venta) {
 			total += c.getPrecio();
 		}
-		return total - (total*(descuento/100));
+		total -= total*((float)descuento/100);
+		return total;
 	}
 }

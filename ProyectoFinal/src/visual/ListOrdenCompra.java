@@ -68,7 +68,7 @@ public class ListOrdenCompra extends JDialog {
 			scrollPane.setBounds(5, 50, 418, 267);
 			contentPanel.add(scrollPane);
 			{
-				String[] headers = {"Id","Suministrador","Cant. Componentes","Cant. Unidades","Fecha"};
+				String[] headers = {"Id","Suministrador","Componentes","Unidades","Fecha"};
 				model=new DefaultTableModel();
 				model.setColumnIdentifiers(headers);
 				table = new JTable();

@@ -57,7 +57,7 @@ public class ListComponente extends JDialog {
 	 */
 	public ListComponente() {
 		setTitle("Inventario de Componentes");
-		setBounds(100, 100, 444, 325);
+		setBounds(100, 100, 525, 325);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
@@ -66,7 +66,7 @@ public class ListComponente extends JDialog {
 		contentPanel.setLayout(null);
 		{
 			JPanel panel = new JPanel();
-			panel.setBounds(5, 52, 418, 190);
+			panel.setBounds(5, 52, 499, 190);
 			panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			contentPanel.add(panel);
 			panel.setLayout(new BorderLayout(0, 0));
@@ -74,7 +74,7 @@ public class ListComponente extends JDialog {
 				JScrollPane scrollPane = new JScrollPane();
 				panel.add(scrollPane, BorderLayout.CENTER);
 				{
-					String headers[] = {"Codigo", "Marca", "Serial", "Precio", "Tipo"};
+					String headers[] = {"Codigo", "Marca", "Serial", "En inventario", "Precio", "Tipo"};
 					model = new DefaultTableModel();
 					model.setColumnIdentifiers(headers);
 					table = new JTable();
@@ -101,7 +101,7 @@ public class ListComponente extends JDialog {
 		}
 		
 		JPanel panelTipo = new JPanel();
-		panelTipo.setBounds(5, 0, 418, 51);
+		panelTipo.setBounds(5, 0, 499, 51);
 		contentPanel.add(panelTipo);
 		panelTipo.setLayout(null);
 		{
@@ -183,22 +183,23 @@ public class ListComponente extends JDialog {
 				rows[0] = c.getId();
 				rows[1] = c.getMarca();
 				rows[2] = c.getSerial();
-				rows[3] = c.getPrecio();
+				rows[3] = c.getCantReal();
+				rows[4] = c.getPrecio();
 				
 				if (c instanceof DiscoDuro) {
-					rows[4] = "Disco Duro";
+					rows[5] = "Disco Duro";
 				}
 				
 				if (c instanceof MotherBoard) {
-					rows[4] = "MotherBoard";
+					rows[5] = "MotherBoard";
 				}
 				
 				if (c instanceof MicroProcesador) {
-					rows[4] = "Micro";
+					rows[5] = "Micro";
 				}
 				
 				if (c instanceof Ram) {
-					rows[4] = "RAM";
+					rows[5] = "RAM";
 				}
 						
 				model.addRow(rows);
@@ -211,8 +212,9 @@ public class ListComponente extends JDialog {
 					rows[0] = c.getId();
 					rows[1] = c.getMarca();
 					rows[2] = c.getSerial();
-					rows[3] = c.getPrecio();
-					rows[4] = "Disco Duro";
+					rows[3] = c.getCantReal();
+					rows[4] = c.getPrecio();
+					rows[5] = "Disco Duro";
 							
 					model.addRow(rows);
 				}
@@ -225,8 +227,9 @@ public class ListComponente extends JDialog {
 					rows[0] = c.getId();
 					rows[1] = c.getMarca();
 					rows[2] = c.getSerial();
-					rows[3] = c.getPrecio();
-					rows[4] = "Micro";
+					rows[3] = c.getCantReal();
+					rows[4] = c.getPrecio();
+					rows[5] = "Micro";
 							
 					model.addRow(rows);
 				}
@@ -239,8 +242,9 @@ public class ListComponente extends JDialog {
 					rows[0] = c.getId();
 					rows[1] = c.getMarca();
 					rows[2] = c.getSerial();
-					rows[3] = c.getPrecio();
-					rows[4] = "RAM";
+					rows[3] = c.getCantReal();
+					rows[4] = c.getPrecio();
+					rows[5] = "RAM";
 							
 					model.addRow(rows);
 				}
@@ -253,8 +257,9 @@ public class ListComponente extends JDialog {
 					rows[0] = c.getId();
 					rows[1] = c.getMarca();
 					rows[2] = c.getSerial();
-					rows[3] = c.getPrecio();
-					rows[4] = "MotherBoard";
+					rows[3] = c.getCantReal();
+					rows[4] = c.getPrecio();
+					rows[5] = "MotherBoard";
 							
 					model.addRow(rows);
 				}

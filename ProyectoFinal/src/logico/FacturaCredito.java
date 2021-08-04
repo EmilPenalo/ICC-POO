@@ -1,15 +1,17 @@
 package logico;
 
-import java.util.Date;
-
 public class FacturaCredito extends Factura {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int diasCredito;
 	private boolean pendiente;
 	
-	public FacturaCredito(String id, Cliente cliente, int descuento, Vendedor vendedor, int diasCredito, boolean pendiente) {
-		super(id, cliente, descuento, vendedor);
+	public FacturaCredito(String id, Cliente cliente, int descuento, Usuario usuario, int diasCredito) {
+		super(id, cliente, descuento, usuario);
 		this.diasCredito = diasCredito;
-		this.pendiente = pendiente;
+		this.pendiente = true;
 	}
 
 	public int getDiasCredito() {

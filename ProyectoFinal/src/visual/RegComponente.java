@@ -595,173 +595,199 @@ public class RegComponente extends JDialog {
 							int cantMax = new Integer(spnMax.getValue().toString());
 							int cantReal = new Integer(spnReal.getValue().toString());
 							
-							if (rdbtnDiscoDuro.isSelected()) {
-								float capacidad = new Float(spnCapacidad.getValue().toString());
-								String modelo = txtModeloDD.getText();
-								
-								if (rdbtnTb.isSelected()) {
-									capacidad = Tienda.getInstance().calcularEquivalenciaTb_a_Gb(capacidad);
-								}
-								
-								if (cbxTipoConexion.getSelectedIndex() != 0) {
-									String tipoConexion = cbxTipoConexion.getSelectedItem().toString();
-									aux = new DiscoDuro(id, marca, serial, precio, cantMin, cantMax, cantReal, capacidad, modelo, tipoConexion);
-									valido = true;
-								} else {
-									JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de conexion", "Registro de Componentes", JOptionPane.WARNING_MESSAGE);
-									valido = false;
-								}
-							}
-							
-							if (rdbtnRAM.isSelected()) {
-								float cantMemoria = new Float(spnMemoria.getValue().toString());
-								
-								if (rdbtnMb.isSelected()) {
-									cantMemoria = Tienda.getInstance().calcularEquivalenciaMb_a_Gb(cantMemoria);
-								}
-								
-								if (cbxTipoMemoria.getSelectedIndex() != 0) {
-									String tipoMemoria = cbxTipoMemoria.getSelectedItem().toString();
-									aux = new Ram(id, marca, serial, precio, cantMin, cantMax, cantReal, cantMemoria, tipoMemoria);
-									valido = true;
-								} else {
-									JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de memoria", "Registro de Componentes", JOptionPane.WARNING_MESSAGE);
-									valido = false;
-								}
-
-							}
-							
-							if (rdbtnMicro.isSelected()) {
-								String modelo = txtModeloMicro.getText();
-								float velocidad = new Float(spnVelocidad.getValue().toString());
-								
-								if (rdbtnMhz.isSelected()) {
-									velocidad = Tienda.getInstance().calcularEquivalenciaGhz(velocidad);
-								}
-								
-								if (cbxTipoSocketMicro.getSelectedIndex() != 0) {
-									String tipoSocket = cbxTipoSocketMicro.getSelectedItem().toString();
-									aux = new MicroProcesador(id, marca, serial, precio, cantMin, cantMax, cantReal, modelo, tipoSocket, velocidad);
-									valido = true;
-								} else {
-									JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de socket", "Registro de Componentes", JOptionPane.WARNING_MESSAGE);
-									valido = false;
-								}
-
-							}
-							
-							if (rdbtnMotherBoard.isSelected()) {
-								String modelo = txtModeloMotherBoard.getText();
-								String tipoSocket = cbxTipoSocketMotherBoard.getSelectedItem().toString();
-								String tipoRam = cbxTipoRam.getSelectedItem().toString();
-								ArrayList<String> conexionesCompatibles = new ArrayList<>();
-								
-								if (listModelSelect.size() >= 1) {
-									if (cbxTipoSocketMotherBoard.getSelectedIndex() != 0) {
-										if (cbxTipoRam.getSelectedIndex() != 0) {
-											
-											for (int i = 0; i < listModelSelect.size(); i++) {
-												conexionesCompatibles.add(listModelSelect.getElementAt(i));
-											}
-											aux = new MotherBoard(id, marca, serial, precio, cantMin, cantMax, cantReal, modelo, tipoSocket, tipoRam, conexionesCompatibles);
-											valido = true;
-											
-										} else {
-											JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de RAM", "Registro de Componentes", JOptionPane.WARNING_MESSAGE);
-											valido = false;
-										}
-										
+							if (cantMin <= cantMax) {
+								if (rdbtnDiscoDuro.isSelected()) {
+									float capacidad = new Float(spnCapacidad.getValue().toString());
+									String modelo = txtModeloDD.getText();
+									
+									if (rdbtnTb.isSelected()) {
+										capacidad = Tienda.getInstance().calcularEquivalenciaTb_a_Gb(capacidad);
+									}
+									
+									if (cbxTipoConexion.getSelectedIndex() != 0) {
+										String tipoConexion = cbxTipoConexion.getSelectedItem().toString();
+										aux = new DiscoDuro(id, marca, serial, precio, cantMin, cantMax, cantReal, capacidad, modelo, tipoConexion);
+										valido = true;
 									} else {
-										JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de socket", "Registro de Componentes", JOptionPane.WARNING_MESSAGE);
+										JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de conexion", "Registro de Componentes", JOptionPane.WARNING_MESSAGE);
 										valido = false;
 									}
-						
-								} else {
-									JOptionPane.showMessageDialog(null, "Debe seleccionar al menos una conexion", "Registro de Componentes", JOptionPane.WARNING_MESSAGE);
-									valido = false;
-								}
-							}
-							if (valido) {
-								Tienda.getInstance().insertarComponente(aux);
-								JOptionPane.showMessageDialog(null, "Registrado satisfactoriamente", "Registro de Componentes", JOptionPane.INFORMATION_MESSAGE);
-								clean();
-							}
-						} else {
-							selected.setId(txtCodigo.getText());
-							selected.setMarca(txtMarca.getText());
-							selected.setSerial(txtSerial.getText());
-							selected.setPrecio(new Float(spnPrecio.getValue().toString()));
-							selected.setCantMin(new Integer(spnMin.getValue().toString()));
-							selected.setCantMax(new Integer(spnMax.getValue().toString()));
-							selected.setCantReal(new Integer(spnReal.getValue().toString()));
-							
-							if (selected instanceof DiscoDuro) {
-								if (cbxTipoConexion.getSelectedIndex() != 0) {
-									((DiscoDuro) selected).setCapacidad(new Float(spnCapacidad.getValue().toString()));
-									((DiscoDuro) selected).setModelo(txtModeloDD.getText());
-									((DiscoDuro) selected).setTipoConexion(cbxTipoConexion.getSelectedItem().toString());
-								} else {
-									JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de conexion", "Registro de Componentes", JOptionPane.WARNING_MESSAGE);
 								}
 								
-							}
-							
-							if (selected instanceof Ram) {
-								if (cbxTipoMemoria.getSelectedIndex() != 0) {
-									((Ram) selected).setCantMemoria(new Float(spnMemoria.getValue().toString()));
-									((Ram) selected).setTipoMemoria(cbxTipoMemoria.getSelectedItem().toString());
-								} else {
-									JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de memoria", "Registro de Componentes", JOptionPane.WARNING_MESSAGE);
-								}
-							}
-							
-							if (selected instanceof MicroProcesador) {
-								if (cbxTipoSocketMicro.getSelectedIndex() != 0) {
-									((MicroProcesador) selected).setModelo(txtModeloMicro.getText());
-									((MicroProcesador) selected).setTipoSocket(cbxTipoSocketMicro.getSelectedItem().toString());
+								if (rdbtnRAM.isSelected()) {
+									float cantMemoria = new Float(spnMemoria.getValue().toString());
 									
+									if (rdbtnMb.isSelected()) {
+										cantMemoria = Tienda.getInstance().calcularEquivalenciaMb_a_Gb(cantMemoria);
+									}
+									
+									if (cbxTipoMemoria.getSelectedIndex() != 0) {
+										String tipoMemoria = cbxTipoMemoria.getSelectedItem().toString();
+										aux = new Ram(id, marca, serial, precio, cantMin, cantMax, cantReal, cantMemoria, tipoMemoria);
+										valido = true;
+									} else {
+										JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de memoria", "Registro de Componentes", JOptionPane.WARNING_MESSAGE);
+										valido = false;
+									}
+
+								}
+								
+								if (rdbtnMicro.isSelected()) {
+									String modelo = txtModeloMicro.getText();
 									float velocidad = new Float(spnVelocidad.getValue().toString());
 									
 									if (rdbtnMhz.isSelected()) {
 										velocidad = Tienda.getInstance().calcularEquivalenciaGhz(velocidad);
 									}
-									((MicroProcesador) selected).setVelocidad(velocidad);
+									
+									if (cbxTipoSocketMicro.getSelectedIndex() != 0) {
+										String tipoSocket = cbxTipoSocketMicro.getSelectedItem().toString();
+										aux = new MicroProcesador(id, marca, serial, precio, cantMin, cantMax, cantReal, modelo, tipoSocket, velocidad);
+										valido = true;
+									} else {
+										JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de socket", "Registro de Componentes", JOptionPane.WARNING_MESSAGE);
+										valido = false;
+									}
 
-								} else {
-									JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de socket", "Registro de Componentes", JOptionPane.WARNING_MESSAGE);
 								}
-							}
-							
-							if (selected instanceof MotherBoard) {
-								ArrayList<String> conexionesCompatibles = new ArrayList<>();
 								
-								if (listModelSelect.size() != 0) {
-									if (cbxTipoSocketMotherBoard.getSelectedIndex() != 0) {
-										if (cbxTipoRam.getSelectedIndex() != 0) {
-											for (int i = 0; i < listModelSelect.size(); i++) {
-												conexionesCompatibles.add(listModelSelect.getElementAt(i));
+								if (rdbtnMotherBoard.isSelected()) {
+									String modelo = txtModeloMotherBoard.getText();
+									String tipoSocket = cbxTipoSocketMotherBoard.getSelectedItem().toString();
+									String tipoRam = cbxTipoRam.getSelectedItem().toString();
+									ArrayList<String> conexionesCompatibles = new ArrayList<>();
+									
+									if (listModelSelect.size() >= 1) {
+										if (cbxTipoSocketMotherBoard.getSelectedIndex() != 0) {
+											if (cbxTipoRam.getSelectedIndex() != 0) {
+												
+												for (int i = 0; i < listModelSelect.size(); i++) {
+													conexionesCompatibles.add(listModelSelect.getElementAt(i));
+												}
+												aux = new MotherBoard(id, marca, serial, precio, cantMin, cantMax, cantReal, modelo, tipoSocket, tipoRam, conexionesCompatibles);
+												valido = true;
+												
+											} else {
+												JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de RAM", "Registro de Componentes", JOptionPane.WARNING_MESSAGE);
+												valido = false;
 											}
-											((MotherBoard) selected).setConexionesCompatibles(conexionesCompatibles);
-											((MotherBoard) selected).setModelo(txtModeloMotherBoard.getText());
-											((MotherBoard) selected).setTipoSocket(cbxTipoSocketMotherBoard.getSelectedItem().toString());
-											((MotherBoard) selected).setTipoRam(cbxTipoRam.getSelectedItem().toString());
 											
 										} else {
-											JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de RAM", "Registro de Componentes", JOptionPane.WARNING_MESSAGE);
+											JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de socket", "Registro de Componentes", JOptionPane.WARNING_MESSAGE);
+											valido = false;
+										}
+							
+									} else {
+										JOptionPane.showMessageDialog(null, "Debe seleccionar al menos una conexion", "Registro de Componentes", JOptionPane.WARNING_MESSAGE);
+										valido = false;
+									}
+								}
+								
+								if (valido) {
+									Tienda.getInstance().insertarComponente(aux);
+									JOptionPane.showMessageDialog(null, "Registrado satisfactoriamente", "Registro de Componentes", JOptionPane.INFORMATION_MESSAGE);
+									clean();
+								}
+								
+							} else {
+								JOptionPane.showMessageDialog(null,"La cantidad minima no puede ser mayor que la maxima","Registro de Componentes",JOptionPane.WARNING_MESSAGE);
+							}
+							
+						} else {
+							
+							boolean valido = false;
+							
+							selected.setId(txtCodigo.getText());
+							selected.setMarca(txtMarca.getText());
+							selected.setSerial(txtSerial.getText());
+							selected.setPrecio(new Float(spnPrecio.getValue().toString()));
+							selected.setCantReal(new Integer(spnReal.getValue().toString()));
+							int cantMin = new Integer(spnMin.getValue().toString());
+							int cantMax = new Integer(spnMax.getValue().toString());
+							
+							if (cantMin <= cantMax) {
+								selected.setCantMin(cantMin);
+								selected.setCantMax(cantMax);
+								
+								if (selected instanceof DiscoDuro) {
+									if (cbxTipoConexion.getSelectedIndex() != 0) {
+										((DiscoDuro) selected).setCapacidad(new Float(spnCapacidad.getValue().toString()));
+										((DiscoDuro) selected).setModelo(txtModeloDD.getText());
+										((DiscoDuro) selected).setTipoConexion(cbxTipoConexion.getSelectedItem().toString());
+										valido = true;
+									} else {
+										JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de conexion", "Modificacion de Componentes", JOptionPane.WARNING_MESSAGE);
+									}
+									
+								}
+								
+								if (selected instanceof Ram) {
+									if (cbxTipoMemoria.getSelectedIndex() != 0) {
+										((Ram) selected).setCantMemoria(new Float(spnMemoria.getValue().toString()));
+										((Ram) selected).setTipoMemoria(cbxTipoMemoria.getSelectedItem().toString());
+										valido = true;
+									} else {
+										JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de memoria", "Modificacion de Componentes", JOptionPane.WARNING_MESSAGE);
+									}
+								}
+								
+								if (selected instanceof MicroProcesador) {
+									if (cbxTipoSocketMicro.getSelectedIndex() != 0) {
+										((MicroProcesador) selected).setModelo(txtModeloMicro.getText());
+										((MicroProcesador) selected).setTipoSocket(cbxTipoSocketMicro.getSelectedItem().toString());
+										
+										float velocidad = new Float(spnVelocidad.getValue().toString());
+										
+										if (rdbtnMhz.isSelected()) {
+											velocidad = Tienda.getInstance().calcularEquivalenciaGhz(velocidad);
+										}
+										((MicroProcesador) selected).setVelocidad(velocidad);
+										valido = true;
+
+									} else {
+										JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de socket", "Modificacion de Componentes", JOptionPane.WARNING_MESSAGE);
+									}
+								}
+								
+								if (selected instanceof MotherBoard) {
+									ArrayList<String> conexionesCompatibles = new ArrayList<>();
+									
+									if (listModelSelect.size() != 0) {
+										if (cbxTipoSocketMotherBoard.getSelectedIndex() != 0) {
+											if (cbxTipoRam.getSelectedIndex() != 0) {
+												
+												for (int i = 0; i < listModelSelect.size(); i++) {
+													conexionesCompatibles.add(listModelSelect.getElementAt(i));
+												}
+												
+												((MotherBoard) selected).setConexionesCompatibles(conexionesCompatibles);
+												((MotherBoard) selected).setModelo(txtModeloMotherBoard.getText());
+												((MotherBoard) selected).setTipoSocket(cbxTipoSocketMotherBoard.getSelectedItem().toString());
+												((MotherBoard) selected).setTipoRam(cbxTipoRam.getSelectedItem().toString());
+												valido = true;
+												
+											} else {
+												JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de RAM", "Modificacion de Componentes", JOptionPane.WARNING_MESSAGE);
+											}
+											
+										} else {
+											JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de Socket", "Modificacion de Componentes", JOptionPane.WARNING_MESSAGE);
 										}
 										
 									} else {
-										JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de Socket", "Registro de Componentes", JOptionPane.WARNING_MESSAGE);
+										JOptionPane.showMessageDialog(null, "Debe seleccionar al menos una conexion", "Modificacion de Componentes", JOptionPane.WARNING_MESSAGE);
 									}
 									
-								} else {
-									JOptionPane.showMessageDialog(null, "Debe seleccionar al menos una conexion", "Registro de Componentes", JOptionPane.WARNING_MESSAGE);
 								}
 								
-							}
+								if (valido) {
+									ListComponente.loadTable(0);
+									dispose();
+								}
 
-//							ListComponente.loadTable(0);
-							dispose();
+							} else {
+								JOptionPane.showMessageDialog(null, "La cantidad minima no puede ser mayor que la maxima", "Modificacion de Componentes", JOptionPane.WARNING_MESSAGE);
+							}
 						}
 						
 					}

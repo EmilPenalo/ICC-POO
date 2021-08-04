@@ -6,12 +6,14 @@ import java.awt.FlowLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import logico.Cliente;
 import logico.Componente;
 import logico.Factura;
+import logico.FacturaCredito;
 import logico.Tienda;
 import logico.Vendedor;
 import logico.Usuario;
@@ -30,6 +32,9 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.JSeparator;
+import javax.swing.event.ChangeListener;
+import javax.swing.text.DefaultFormatter;
+import javax.swing.event.ChangeEvent;
 
 public class HacerVenta extends JDialog {
 
@@ -50,7 +55,9 @@ public class HacerVenta extends JDialog {
 	private JButton btnFinalizar;
 	private JRadioButton rdbtnSinCredito;
 	private JSpinner spnDescuento;
-	private JRadioButton rdbtnCredito;
+	private JRadioButton rdbtnCredito; 
+	private JSpinner spnMonto;
+	private JSpinner spnDiasPagar;
 	
 	/**
 	 * Launch the application.
@@ -70,7 +77,7 @@ public class HacerVenta extends JDialog {
 	 */
 	public HacerVenta() {
 		setTitle("Hacer venta");
-		setBounds(100, 100, 450, 599);
+		setBounds(100, 100, 450, 872);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
@@ -186,6 +193,7 @@ public class HacerVenta extends JDialog {
 					listModelVenta.addElement(aux);
 					listModelComp.remove(listComponente.getSelectedIndex());
 					btnDerecha.setEnabled(false);
+					updateMonto();
 				}
 			});
 			btnDerecha.setEnabled(false);
@@ -199,6 +207,7 @@ public class HacerVenta extends JDialog {
 					listModelComp.addElement(aux);
 					listModelVenta.remove(listVenta.getSelectedIndex());
 					btnIzquierda.setEnabled(false);
+					updateMonto();
 				}
 			});
 			btnIzquierda.setEnabled(false);
@@ -233,7 +242,7 @@ public class HacerVenta extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					rdbtnCredito.setSelected(true);
 					rdbtnSinCredito.setSelected(false);
-					
+					spnDiasPagar.setEnabled(true);
 				}
 			});
 			rdbtnCredito.setBounds(30, 425, 109, 23);
@@ -244,24 +253,58 @@ public class HacerVenta extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					rdbtnSinCredito.setSelected(true);
 					rdbtnCredito.setSelected(false);
+					spnDiasPagar.setEnabled(false);
 				}
 			});
 			rdbtnSinCredito.setSelected(true);
 			rdbtnSinCredito.setBounds(146, 425, 122, 23);
 			panel.add(rdbtnSinCredito);
 			
-			JLabel lblNewLabel_5 = new JLabel("% Descuento:");
-			lblNewLabel_5.setBounds(30, 480, 140, 14);
-			panel.add(lblNewLabel_5);
-			
-			spnDescuento = new JSpinner();
-			spnDescuento.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
-			spnDescuento.setBounds(117, 472, 145, 30);
-			panel.add(spnDescuento);
-			
 			JSeparator separator = new JSeparator();
 			separator.setBounds(15, 216, 394, 2);
 			panel.add(separator);
+			
+			JPanel panelInfo = new JPanel();
+			panelInfo.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panelInfo.setBounds(15, 460, 394, 150);
+			panel.add(panelInfo);
+			panelInfo.setLayout(null);
+			
+			JLabel lblNewLabel_5 = new JLabel("% Descuento:");
+			lblNewLabel_5.setBounds(15, 27, 140, 14);
+			panelInfo.add(lblNewLabel_5);
+			
+			spnDescuento = new JSpinner();
+			JFormattedTextField field = getTextField(spnDescuento);
+		    DefaultFormatter formatter = (DefaultFormatter) field.getFormatter();
+		    formatter.setCommitsOnValidEdit(true);
+			spnDescuento.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent arg0) {
+					updateMonto();
+				}
+			});
+			spnDescuento.setBounds(110, 19, 145, 30);
+			panelInfo.add(spnDescuento);
+			spnDescuento.setModel(new SpinnerNumberModel(0, 0, 100, 1));
+			
+			JLabel lblNewLabel_5_1 = new JLabel("Monto a pagar:");
+			lblNewLabel_5_1.setBounds(15, 109, 140, 14);
+			panelInfo.add(lblNewLabel_5_1);
+			
+			spnMonto = new JSpinner();
+			spnMonto.setModel(new SpinnerNumberModel(new Float(0), new Float(0), null, new Float(1)));
+			spnMonto.setBounds(110, 101, 145, 30);
+			panelInfo.add(spnMonto);
+			spnMonto.setEnabled(false);
+			
+			JLabel lblNewLabel_5_2 = new JLabel("Dias para pagar:");
+			lblNewLabel_5_2.setBounds(15, 68, 140, 14);
+			panelInfo.add(lblNewLabel_5_2);
+			
+			spnDiasPagar = new JSpinner();
+			spnDiasPagar.setBounds(110, 60, 145, 30);
+			panelInfo.add(spnDiasPagar);
+			spnDiasPagar.setEnabled(false);
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -274,33 +317,69 @@ public class HacerVenta extends JDialog {
 					public void actionPerformed(ActionEvent e) {
 						if (listModelVenta.size() > 0) {
 							if (cliente != null) {
-								
-								Factura f = null;
-								String id = new String("F-" + Factura.cod);
-								Cliente c = cliente;
-								int descuento = Integer.valueOf(spnDescuento.getValue().toString());
-								Usuario usr = Tienda.getLoginUser();								
-								
-								if (rdbtnSinCredito.isSelected()) {
-									f = new Factura(id, c, descuento, usr);
-								} else if (rdbtnCredito.isSelected()) {
+								if (rdbtnCredito.isSelected()) {
 									
+									float monto = new Float(spnMonto.getValue().toString());
+									if (Tienda.getInstance().checkCredito(cliente, monto)) {
+										
+										cliente.setCreditoEnUso(cliente.getCreditoEnUso() + monto);
+										
+										FacturaCredito f = null;
+										String id = new String("F-" + Factura.cod);
+										Cliente c = cliente;
+										int descuento = Integer.valueOf(spnDescuento.getValue().toString());
+										Usuario usr = Tienda.getLoginUser();	
+										int dias = Integer.valueOf(spnDiasPagar.getValue().toString());
+										
+										f = new FacturaCredito(id, c, descuento, usr, dias);
+										
+										for (int i = 0; i < listModelVenta.size(); i++) {
+											Componente comp = Tienda.getInstance().buscarComponenteById(listModelVenta.get(i).toString());
+											comp.setCantReal(comp.getCantReal() - 1);
+											
+											if (!Tienda.getInstance().checkDisponibilidadComponente(comp)) {
+												JOptionPane.showMessageDialog(null,"No se encontro un suministrador que supla el componente: " + comp.getId() 
+												+ ", por lo que no se genero una orden de compra","Error",JOptionPane.ERROR_MESSAGE);
+											}
+											f.agregarComponente(comp);
+										}
+										
+										if (Tienda.getLoginUser() instanceof Vendedor) {
+											((Vendedor) Tienda.getLoginUser()).setCantVentas(((Vendedor) Tienda.getLoginUser()).getCantVentas() + 1);
+											((Vendedor) Tienda.getLoginUser()).setVentas(((Vendedor) Tienda.getLoginUser()).getVentas() + f.precioTotal());
+										}
+										
+										Tienda.getInstance().insertarFactura(f);
+										JOptionPane.showMessageDialog(null,"Venta a credito realizada con exito","Finalizar Venta",JOptionPane.INFORMATION_MESSAGE);
+										clean();
+										
+									} else {
+										JOptionPane.showMessageDialog(null,"El cliente no tiene suficiente credito para esta orden","Error de Credito",JOptionPane.WARNING_MESSAGE);
+									}
+									
+								} else if (rdbtnSinCredito.isSelected()) {
+									
+									Factura f = new Factura(new String("F-" + Factura.cod), cliente, Integer.valueOf(spnDescuento.getValue().toString()), Tienda.getLoginUser());
+									
+									for (int i = 0; i < listModelVenta.size(); i++) {
+										Componente comp = Tienda.getInstance().buscarComponenteById(listModelVenta.get(i).toString());
+										comp.setCantReal(comp.getCantReal() - 1);
+										if (!Tienda.getInstance().checkDisponibilidadComponente(comp)) {
+											JOptionPane.showMessageDialog(null,"No se encontro un suministrador que supla el componente: " + comp.getId() 
+											+ ", por lo que no se genero una orden de compra","Error",JOptionPane.ERROR_MESSAGE);
+										}
+										f.agregarComponente(comp);
+									}
+									
+									if (Tienda.getLoginUser() instanceof Vendedor) {
+										((Vendedor) Tienda.getLoginUser()).setCantVentas(((Vendedor) Tienda.getLoginUser()).getCantVentas() + 1);
+										((Vendedor) Tienda.getLoginUser()).setVentas(((Vendedor) Tienda.getLoginUser()).getVentas() + f.precioTotal());
+									}
+									
+									Tienda.getInstance().insertarFactura(f);
+									JOptionPane.showMessageDialog(null,"Venta realizada con exito","Finalizar Venta",JOptionPane.INFORMATION_MESSAGE);
+									clean();
 								}
-								
-								for (int i = 0; i < listModelVenta.size(); i++) {
-									Componente comp = Tienda.getInstance().buscarComponenteById(listModelVenta.get(i).toString());
-									comp.setCantReal(comp.getCantReal() - 1);
-									f.agregarComponente(comp);
-								}
-								
-								if (Tienda.getLoginUser() instanceof Vendedor) {
-									((Vendedor)Tienda.getLoginUser()).setCantVentas(((Vendedor)Tienda.getLoginUser()).getCantVentas() + 1);
-									((Vendedor)Tienda.getLoginUser()).setVentas(((Vendedor)Tienda.getLoginUser()).getVentas() + f.precioTotal());
-								}
-								
-								Tienda.getInstance().insertarFactura(f);
-								JOptionPane.showMessageDialog(null,"Venta realizada con exito","Finalizar Venta",JOptionPane.INFORMATION_MESSAGE);
-								clean();
 								
 							} else {
 								JOptionPane.showMessageDialog(null,"Necesita seleccionar un cliente","Aviso",JOptionPane.WARNING_MESSAGE);
@@ -327,6 +406,16 @@ public class HacerVenta extends JDialog {
 			}
 		}
 		loadComponentesDisponible();
+	}
+	
+	private void updateMonto() {
+		float total = 0;
+		for (int i = 0; i < listModelVenta.size(); i++) {
+			Componente comp = Tienda.getInstance().buscarComponenteById(listModelVenta.get(i).toString());
+			total += comp.getPrecio();
+		}
+		float descuento = new Float(spnDescuento.getValue().toString()) / 100;
+		spnMonto.setValue(total - (total*descuento));
 	}
 
 	protected void loadCliente(Cliente c) {
@@ -373,7 +462,9 @@ public class HacerVenta extends JDialog {
 		loadComponentesDisponible();
 		btnFinalizar.setEnabled(false);
 		rdbtnSinCredito.setSelected(true);
-		rdbtnCredito.setEnabled(false);
+		rdbtnCredito.setSelected(false);
+		spnMonto.setValue(0);
+		spnDiasPagar.setValue(0);
 	}
 	
 	private void cleanReg() {
@@ -381,5 +472,10 @@ public class HacerVenta extends JDialog {
 		txtDireccion.setText("");
 		txtTelefono.setText("");
 		btnRegistrar.setEnabled(false);
+	}
+	
+	// Para modificar el monto cuando se modifica el descuento
+	public JFormattedTextField getTextField(JSpinner spinner) {
+		return ((JSpinner.DefaultEditor)spinner.getEditor()).getTextField(); 
 	}
 }

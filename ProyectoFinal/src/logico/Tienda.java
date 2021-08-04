@@ -434,16 +434,19 @@ public class Tienda implements Serializable{
 		f.getCliente().setCreditoEnUso(f.getCliente().getCreditoEnUso() - f.precioTotal());
 	}
 	
-	public void checkDisponibilidadComponente(Componente c) {
+	public boolean checkDisponibilidadComponente(Componente c) {
 		if (c.getCantReal() < c.getCantMin()) {
 			for (Suministrador sumi : suministradores) {
 				if (sumi.getComponentes().contains(c)) {
 					OrdenCompra orden = new OrdenCompra("OC-" + OrdenCompra.cod, sumi, c.getCantMax() - c.getCantReal());
 					orden.addComponente(c);
 					ordenesCompra.add(orden);
-					break;
+					return true;
 				}
 			}
+			return false;
+		} else {
+			return true;
 		}
 	}
 
@@ -470,5 +473,12 @@ public class Tienda implements Serializable{
 		Factura.cod = codFactura;
 		OrdenCompra.cod = codOrden;
 		Suministrador.cod = codSumi;
+	}
+
+	public boolean checkCredito(Cliente c, float monto) {
+		if (c.getCredito() - c.getCreditoEnUso() >= monto) {
+			return true;
+		}
+		return false;
 	}
 }

@@ -293,6 +293,7 @@ public class RegSuministrador extends JDialog {
 		txtNombre.setText("");
 		spnEntrega.setValue(1);
 		listModelSumi.removeAllElements();
+		loadComponentes();
 	}
 	
 	private void loadSumi() {
