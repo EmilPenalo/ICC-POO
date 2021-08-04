@@ -37,5 +37,8 @@ public class Vendedor extends Usuario {
 	public void setVentas(float ventas) {
 		this.ventas = ventas;
 	}
-
+	
+	public float calculoComision() {
+		return ventas * ((float) comision / 100);
+	}
 }

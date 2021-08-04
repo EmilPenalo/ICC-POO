@@ -37,6 +37,7 @@ public class ListUsuario extends JDialog {
 	private static Object rows[];
 	private Usuario selected = null;
 	private JButton btnEliminar;
+	private JButton btnInfo;
 
 	/**
 	 * Launch the application.
@@ -87,6 +88,10 @@ public class ListUsuario extends JDialog {
 
 								String id = (String)(model.getValueAt(index, 0));
 								selected = Tienda.getInstance().buscarUsuarioById(id);
+								
+								if (selected instanceof Vendedor) {
+									btnInfo.setEnabled(true);
+								}
 							}
 						}
 					});
@@ -121,8 +126,25 @@ public class ListUsuario extends JDialog {
 							}
 							
 							btnEliminar.setEnabled(false);
+							btnInfo.setEnabled(false);
 						}
 					});
+					{
+						btnInfo = new JButton("Info");
+						btnInfo.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								
+								JOptionPane.showMessageDialog(null, "% Comision: " + ((Vendedor) selected).getComision() + "\nCant. Ventas: " +
+										((Vendedor) selected).getCantVentas() + "\nTotal Vendido: $" + ((Vendedor) selected).getVentas() + "\nComision: $" +
+										((Vendedor) selected).calculoComision(),"Informacion de Vendedor", JOptionPane.INFORMATION_MESSAGE);
+								
+								btnInfo.setEnabled(false);
+								btnEliminar.setEnabled(false);
+							}
+						});
+						btnInfo.setEnabled(false);
+						buttonPane.add(btnInfo);
+					}
 					btnEliminar.setEnabled(false);
 					buttonPane.add(btnEliminar);
 				}
