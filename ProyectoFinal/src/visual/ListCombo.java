@@ -32,6 +32,7 @@ public class ListCombo extends JDialog {
 	private static DefaultTableModel model;
 	private static Object[] rows;
 	private Combo selected;
+	private static JButton btnInfo;
 
 	/**
 	 * Launch the application.
@@ -75,6 +76,7 @@ public class ListCombo extends JDialog {
 						{
 							btnModificar.setEnabled(true);
 							btnEliminar.setEnabled(true);
+							btnInfo.setEnabled(true);
 							String id = (String)(model.getValueAt(index,0));
 							selected = Tienda.getInstance().buscarComboById(id);
 						}
@@ -101,8 +103,25 @@ public class ListCombo extends JDialog {
 						
 						btnEliminar.setEnabled(false);
 						btnModificar.setEnabled(false);
+						btnInfo.setEnabled(false);
 					}
 				});
+				{
+					btnInfo = new JButton("Info");
+					btnInfo.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							MostrarCombo info = new MostrarCombo(selected);
+							info.setModal(true);
+							info.setVisible(true);
+							
+							btnEliminar.setEnabled(false);
+							btnModificar.setEnabled(false);
+							btnInfo.setEnabled(false);
+						}
+					});
+					btnInfo.setEnabled(false);
+					buttonPane.add(btnInfo);
+				}
 				btnEliminar.setEnabled(false);
 				buttonPane.add(btnEliminar);
 			}
@@ -116,6 +135,7 @@ public class ListCombo extends JDialog {
 						
 						btnEliminar.setEnabled(false);
 						btnModificar.setEnabled(false);
+						btnInfo.setEnabled(false);
 					}
 				});
 				btnModificar.setEnabled(false);
@@ -149,6 +169,7 @@ public class ListCombo extends JDialog {
 		}
 		btnModificar.setEnabled(false);
 		btnEliminar.setEnabled(false);
+		btnInfo.setEnabled(false);
 	}
 
 }

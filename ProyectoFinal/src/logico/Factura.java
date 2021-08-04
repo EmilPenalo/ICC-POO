@@ -15,6 +15,7 @@ public class Factura implements Serializable{
 	private int descuento;
 	private Cliente cliente;
 	private ArrayList<Componente> venta;
+	private ArrayList<Combo> ventaCombos;
 	public static int cod = 1;
 	
 	public Factura(String id, Cliente cliente, int descuento, Usuario usuario) {
@@ -25,6 +26,7 @@ public class Factura implements Serializable{
 		this.cliente = cliente;
 		this.descuento = descuento;
 		this.venta = new ArrayList<>();
+		this.ventaCombos = new ArrayList<>();
 		Factura.cod++;
 	}
 
@@ -76,8 +78,20 @@ public class Factura implements Serializable{
 		this.venta = venta;
 	}
 	
+	public ArrayList<Combo> getVentaCombos() {
+		return ventaCombos;
+	}
+
+	public void setVentaCombos(ArrayList<Combo> ventaCombos) {
+		this.ventaCombos = ventaCombos;
+	}
+
 	public void agregarComponente(Componente c) {
 		venta.add(c);
+	}
+	
+	public void agregarCombo(Combo combo) {
+		ventaCombos.add(combo);
 	}
 	
 	public float precioTotal() {
@@ -85,6 +99,11 @@ public class Factura implements Serializable{
 		for (Componente c : venta) {
 			total += c.getPrecio();
 		}
+		
+		for (Combo combo : ventaCombos) {
+			total += combo.precio();
+		}
+		
 		total -= total*((float)descuento/100);
 		return total;
 	}

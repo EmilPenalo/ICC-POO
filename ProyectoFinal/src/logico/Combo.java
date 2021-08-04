@@ -64,6 +64,6 @@ public class Combo implements Serializable {
 		for (Componente c : componentes) {
 			total += c.getPrecio();
 		}
-		return total - (total * (descuento/100) );
+		return total - (total * ((float)descuento/100) );
 	}
 }

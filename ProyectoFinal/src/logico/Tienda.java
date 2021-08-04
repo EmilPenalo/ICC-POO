@@ -481,4 +481,13 @@ public class Tienda implements Serializable{
 		}
 		return false;
 	}
+
+	public boolean checkCombo(Combo c) {
+		for (Componente comp : c.getComponentes()) {
+			if (comp.getCantReal() == 0) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

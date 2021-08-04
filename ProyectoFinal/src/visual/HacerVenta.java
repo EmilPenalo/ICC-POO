@@ -3,6 +3,7 @@ package visual;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
+import javax.rmi.CORBA.Tie;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -11,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import logico.Cliente;
+import logico.Combo;
 import logico.Componente;
 import logico.Factura;
 import logico.FacturaCredito;
@@ -58,6 +60,14 @@ public class HacerVenta extends JDialog {
 	private JRadioButton rdbtnCredito; 
 	private JSpinner spnMonto;
 	private JSpinner spnDiasPagar;
+	private JButton btnInfo;
+	private JButton btnDerechaCombo;
+	private JButton btnIzquierdaCombo;
+	private JList<String> listCombo;
+	private JList<String> listVentaCombo;
+	private DefaultListModel<String> listModelCombo;
+	private DefaultListModel<String> listModelVentaCombo;
+	private JButton btnInfoVenta;
 	
 	/**
 	 * Launch the application.
@@ -77,7 +87,7 @@ public class HacerVenta extends JDialog {
 	 */
 	public HacerVenta() {
 		setTitle("Hacer venta");
-		setBounds(100, 100, 450, 872);
+		setBounds(100, 100, 450, 935);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
@@ -152,6 +162,7 @@ public class HacerVenta extends JDialog {
 						
 						Cliente aux = new Cliente(txtCedula.getText(),txtNombre.getText(), txtDireccion.getText(), txtTelefono.getText());
 						Tienda.getInstance().insertarCliente(aux);
+						cliente = aux;
 						JOptionPane.showMessageDialog(null, "Se ha registrado el cliente con exito", "Registro de cliente", JOptionPane.INFORMATION_MESSAGE);
 						loadCliente(aux);
 					} else {
@@ -163,7 +174,7 @@ public class HacerVenta extends JDialog {
 			btnRegistrar.setBounds(149, 122, 95, 30);
 			panel_1.add(btnRegistrar);
 			
-			JLabel lblNewLabel_3 = new JLabel("Disponibles:");
+			JLabel lblNewLabel_3 = new JLabel("Componentes:");
 			lblNewLabel_3.setBounds(15, 235, 122, 14);
 			panel.add(lblNewLabel_3);
 			
@@ -245,7 +256,7 @@ public class HacerVenta extends JDialog {
 					spnDiasPagar.setEnabled(true);
 				}
 			});
-			rdbtnCredito.setBounds(30, 425, 109, 23);
+			rdbtnCredito.setBounds(30, 651, 109, 23);
 			panel.add(rdbtnCredito);
 			
 			rdbtnSinCredito = new JRadioButton("Sin Credito");
@@ -257,7 +268,7 @@ public class HacerVenta extends JDialog {
 				}
 			});
 			rdbtnSinCredito.setSelected(true);
-			rdbtnSinCredito.setBounds(146, 425, 122, 23);
+			rdbtnSinCredito.setBounds(146, 651, 122, 23);
 			panel.add(rdbtnSinCredito);
 			
 			JSeparator separator = new JSeparator();
@@ -266,7 +277,7 @@ public class HacerVenta extends JDialog {
 			
 			JPanel panelInfo = new JPanel();
 			panelInfo.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panelInfo.setBounds(15, 460, 394, 150);
+			panelInfo.setBounds(15, 686, 394, 150);
 			panel.add(panelInfo);
 			panelInfo.setLayout(null);
 			
@@ -305,6 +316,124 @@ public class HacerVenta extends JDialog {
 			spnDiasPagar.setBounds(110, 60, 145, 30);
 			panelInfo.add(spnDiasPagar);
 			spnDiasPagar.setEnabled(false);
+			
+			JLabel lblNewLabel_3_1 = new JLabel("Combos:");
+			lblNewLabel_3_1.setBounds(15, 411, 122, 14);
+			panel.add(lblNewLabel_3_1);
+			
+			JScrollPane scrollPane_2 = new JScrollPane();
+			scrollPane_2.setBounds(15, 436, 140, 135);
+			panel.add(scrollPane_2);
+			
+			listModelCombo = new DefaultListModel<String>();
+			listCombo = new JList<String>();
+			listCombo.setModel(listModelCombo);
+			listCombo.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					int index =- 1;
+					index = listCombo.getSelectedIndex();
+					if (index != -1){
+						btnDerechaCombo.setEnabled(true);
+						btnInfo.setEnabled(true);
+					}
+				}
+			});
+			scrollPane_2.setViewportView(listCombo);
+			
+			JLabel lblNewLabel_4_1 = new JLabel("Venta de combos:");
+			lblNewLabel_4_1.setBounds(269, 411, 140, 14);
+			panel.add(lblNewLabel_4_1);
+			
+			JScrollPane scrollPane_1_1 = new JScrollPane();
+			scrollPane_1_1.setBounds(269, 436, 140, 135);
+			panel.add(scrollPane_1_1);
+			
+			listModelVentaCombo = new DefaultListModel<String>();
+			listVentaCombo = new JList<String>();
+			listVentaCombo.setModel(listModelVentaCombo);
+			listVentaCombo.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					int index =- 1;
+					index = listVentaCombo.getSelectedIndex();
+					if (index != -1){
+						btnIzquierdaCombo.setEnabled(true);
+						btnInfoVenta.setEnabled(true);
+					}
+				}
+			});
+			scrollPane_1_1.setViewportView(listVentaCombo);
+			
+			btnDerechaCombo = new JButton(">>");
+			btnDerechaCombo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					String aux = listCombo.getSelectedValue().toString();
+					listModelVentaCombo.addElement(aux);
+					listModelCombo.remove(listCombo.getSelectedIndex());
+					btnDerechaCombo.setEnabled(false);
+					btnInfo.setEnabled(false);
+					updateMonto();
+				}
+			});
+			btnDerechaCombo.setEnabled(false);
+			btnDerechaCombo.setBounds(178, 454, 70, 30);
+			panel.add(btnDerechaCombo);
+			
+			btnIzquierdaCombo = new JButton("<<");
+			btnIzquierdaCombo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String aux = listVentaCombo.getSelectedValue().toString();
+					listModelCombo.addElement(aux);
+					listModelVentaCombo.remove(listVentaCombo.getSelectedIndex());
+					btnIzquierdaCombo.setEnabled(false);
+					btnInfoVenta.setEnabled(false);
+					updateMonto();
+				}
+			});
+			btnIzquierdaCombo.setEnabled(false);
+			btnIzquierdaCombo.setBounds(178, 517, 70, 30);
+			panel.add(btnIzquierdaCombo);
+			
+			JSeparator separator_1 = new JSeparator();
+			separator_1.setBounds(15, 633, 404, 2);
+			panel.add(separator_1);
+			
+			btnInfo = new JButton("Mas info.");
+			btnInfo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String id = listCombo.getSelectedValue().toString();
+					Combo combo = Tienda.getInstance().buscarComboById(id);
+					if (combo != null) {
+						MostrarCombo info = new MostrarCombo(combo);
+						info.setModal(true);
+						info.setVisible(true);
+					}
+					btnInfo.setEnabled(false);
+					btnDerechaCombo.setEnabled(false);
+				}
+			});
+			btnInfo.setEnabled(false);
+			btnInfo.setBounds(15, 587, 95, 30);
+			panel.add(btnInfo);
+			
+			btnInfoVenta = new JButton("Mas info.");
+			btnInfoVenta.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String id = listVentaCombo.getSelectedValue().toString();
+					Combo combo = Tienda.getInstance().buscarComboById(id);
+					if (combo != null) {
+						MostrarCombo info = new MostrarCombo(combo);
+						info.setModal(true);
+						info.setVisible(true);
+					}
+					btnInfoVenta.setEnabled(false);
+					btnIzquierdaCombo.setEnabled(false);
+				}
+			});
+			btnInfoVenta.setEnabled(false);
+			btnInfoVenta.setBounds(269, 587, 95, 30);
+			panel.add(btnInfoVenta);
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -315,33 +444,90 @@ public class HacerVenta extends JDialog {
 				btnFinalizar = new JButton("Finalizar");
 				btnFinalizar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						if (listModelVenta.size() > 0) {
+						if (listModelVenta.size() > 0 || listModelVentaCombo.size() > 0) {
 							if (cliente != null) {
-								if (rdbtnCredito.isSelected()) {
+								
+								Componente verify = checkDisponibilidad();
+								if (verify == null) {
 									
-									float monto = new Float(spnMonto.getValue().toString());
-									if (Tienda.getInstance().checkCredito(cliente, monto)) {
+									if (rdbtnCredito.isSelected()) {
 										
-										cliente.setCreditoEnUso(cliente.getCreditoEnUso() + monto);
+										float monto = new Float(spnMonto.getValue().toString());
+										if (Tienda.getInstance().checkCredito(cliente, monto)) {
+											
+											cliente.setCreditoEnUso(cliente.getCreditoEnUso() + monto);
+											
+											FacturaCredito f = null;
+											String id = new String("F-" + Factura.cod);
+											Cliente c = cliente;
+											int descuento = Integer.valueOf(spnDescuento.getValue().toString());
+											Usuario usr = Tienda.getLoginUser();	
+											int dias = Integer.valueOf(spnDiasPagar.getValue().toString());
+											
+											f = new FacturaCredito(id, c, descuento, usr, dias);
+											
+											for (int i = 0; i < listModelVenta.size(); i++) {
+												Componente comp = Tienda.getInstance().buscarComponenteById(listModelVenta.get(i).toString());
+												comp.setCantReal(comp.getCantReal() - 1);
+												
+												if (!Tienda.getInstance().checkDisponibilidadComponente(comp)) {
+													JOptionPane.showMessageDialog(null,"No se encontro un suministrador que supla el componente: " + comp.getId() 
+													+ ", por lo que no se genero una orden de compra","Error",JOptionPane.ERROR_MESSAGE);
+												}
+												f.agregarComponente(comp);
+											}
+											
+											for (int i = 0; i < listModelVentaCombo.size(); i++) {
+												Combo combo = Tienda.getInstance().buscarComboById(listModelVentaCombo.get(i).toString());
+												
+												for (Componente comp : combo.getComponentes()) {
+													comp.setCantReal(comp.getCantReal() - 1);
+													if (!Tienda.getInstance().checkDisponibilidadComponente(comp)) {
+														JOptionPane.showMessageDialog(null,"No se encontro un suministrador que supla el componente: " + comp.getId() 
+														+ ", por lo que no se genero una orden de compra","Error",JOptionPane.ERROR_MESSAGE);
+													}
+												}
+												f.agregarCombo(combo);
+											}
+											
+											if (Tienda.getLoginUser() instanceof Vendedor) {
+												((Vendedor) Tienda.getLoginUser()).setCantVentas(((Vendedor) Tienda.getLoginUser()).getCantVentas() + 1);
+												((Vendedor) Tienda.getLoginUser()).setVentas(((Vendedor) Tienda.getLoginUser()).getVentas() + f.precioTotal());
+											}
+											
+											Tienda.getInstance().insertarFactura(f);
+											JOptionPane.showMessageDialog(null,"Venta a credito realizada con exito","Finalizar Venta",JOptionPane.INFORMATION_MESSAGE);
+											clean();
+											
+										} else {
+											JOptionPane.showMessageDialog(null,"El cliente no tiene suficiente credito para esta orden","Error de Credito",JOptionPane.WARNING_MESSAGE);
+										}
 										
-										FacturaCredito f = null;
-										String id = new String("F-" + Factura.cod);
-										Cliente c = cliente;
-										int descuento = Integer.valueOf(spnDescuento.getValue().toString());
-										Usuario usr = Tienda.getLoginUser();	
-										int dias = Integer.valueOf(spnDiasPagar.getValue().toString());
+									} else if (rdbtnSinCredito.isSelected()) {
 										
-										f = new FacturaCredito(id, c, descuento, usr, dias);
+										Factura f = new Factura(new String("F-" + Factura.cod), cliente, Integer.valueOf(spnDescuento.getValue().toString()), Tienda.getLoginUser());
 										
 										for (int i = 0; i < listModelVenta.size(); i++) {
 											Componente comp = Tienda.getInstance().buscarComponenteById(listModelVenta.get(i).toString());
 											comp.setCantReal(comp.getCantReal() - 1);
-											
 											if (!Tienda.getInstance().checkDisponibilidadComponente(comp)) {
 												JOptionPane.showMessageDialog(null,"No se encontro un suministrador que supla el componente: " + comp.getId() 
 												+ ", por lo que no se genero una orden de compra","Error",JOptionPane.ERROR_MESSAGE);
 											}
 											f.agregarComponente(comp);
+										}
+										
+										for (int i = 0; i < listModelVentaCombo.size(); i++) {
+											Combo combo = Tienda.getInstance().buscarComboById(listModelVentaCombo.get(i).toString());
+											
+											for (Componente comp : combo.getComponentes()) {
+												comp.setCantReal(comp.getCantReal() - 1);
+												if (!Tienda.getInstance().checkDisponibilidadComponente(comp)) {
+													JOptionPane.showMessageDialog(null,"No se encontro un suministrador que supla el componente: " + comp.getId() 
+													+ ", por lo que no se genero una orden de compra","Error",JOptionPane.ERROR_MESSAGE);
+												}
+											}
+											f.agregarCombo(combo);
 										}
 										
 										if (Tienda.getLoginUser() instanceof Vendedor) {
@@ -350,42 +536,19 @@ public class HacerVenta extends JDialog {
 										}
 										
 										Tienda.getInstance().insertarFactura(f);
-										JOptionPane.showMessageDialog(null,"Venta a credito realizada con exito","Finalizar Venta",JOptionPane.INFORMATION_MESSAGE);
+										JOptionPane.showMessageDialog(null,"Venta realizada con exito","Finalizar Venta",JOptionPane.INFORMATION_MESSAGE);
 										clean();
-										
-									} else {
-										JOptionPane.showMessageDialog(null,"El cliente no tiene suficiente credito para esta orden","Error de Credito",JOptionPane.WARNING_MESSAGE);
 									}
 									
-								} else if (rdbtnSinCredito.isSelected()) {
-									
-									Factura f = new Factura(new String("F-" + Factura.cod), cliente, Integer.valueOf(spnDescuento.getValue().toString()), Tienda.getLoginUser());
-									
-									for (int i = 0; i < listModelVenta.size(); i++) {
-										Componente comp = Tienda.getInstance().buscarComponenteById(listModelVenta.get(i).toString());
-										comp.setCantReal(comp.getCantReal() - 1);
-										if (!Tienda.getInstance().checkDisponibilidadComponente(comp)) {
-											JOptionPane.showMessageDialog(null,"No se encontro un suministrador que supla el componente: " + comp.getId() 
-											+ ", por lo que no se genero una orden de compra","Error",JOptionPane.ERROR_MESSAGE);
-										}
-										f.agregarComponente(comp);
-									}
-									
-									if (Tienda.getLoginUser() instanceof Vendedor) {
-										((Vendedor) Tienda.getLoginUser()).setCantVentas(((Vendedor) Tienda.getLoginUser()).getCantVentas() + 1);
-										((Vendedor) Tienda.getLoginUser()).setVentas(((Vendedor) Tienda.getLoginUser()).getVentas() + f.precioTotal());
-									}
-									
-									Tienda.getInstance().insertarFactura(f);
-									JOptionPane.showMessageDialog(null,"Venta realizada con exito","Finalizar Venta",JOptionPane.INFORMATION_MESSAGE);
-									clean();
+								} else {
+									JOptionPane.showMessageDialog(null,"No hay suficientes unidades de: " + verify.getId() + ", en inventario para esta venta","Aviso",JOptionPane.WARNING_MESSAGE);
 								}
 								
 							} else {
 								JOptionPane.showMessageDialog(null,"Necesita seleccionar un cliente","Aviso",JOptionPane.WARNING_MESSAGE);
 							}
 						} else {
-							JOptionPane.showMessageDialog(null,"Necesita al menos 1 componente para finalizar la venta","Aviso",JOptionPane.WARNING_MESSAGE);
+							JOptionPane.showMessageDialog(null,"Necesita al menos 1 componente o combo para finalizar la venta","Aviso",JOptionPane.WARNING_MESSAGE);
 						}
 					}
 				});
@@ -406,19 +569,51 @@ public class HacerVenta extends JDialog {
 			}
 		}
 		loadComponentesDisponible();
+		loadCombosDisponibles();
 	}
 	
+	private Componente checkDisponibilidad() {
+		int count;
+		
+		for (int i = 0; i < listModelVenta.size(); i++) {
+			count = 1;
+			Componente comp = Tienda.getInstance().buscarComponenteById(listModelVenta.get(i).toString());
+			
+			for (int j = 0; j < listModelVentaCombo.size(); j++) {
+				Combo combo = Tienda.getInstance().buscarComboById(listModelVentaCombo.get(j).toString());
+				
+				for (Componente c : combo.getComponentes()) {
+					if (comp.equals(c)) {
+						count++;
+					}
+				}
+			}
+			
+			if (comp.getCantReal() < count) {
+				return comp;
+			}
+		}
+		return null;
+	}
+
 	private void updateMonto() {
 		float total = 0;
+		
 		for (int i = 0; i < listModelVenta.size(); i++) {
 			Componente comp = Tienda.getInstance().buscarComponenteById(listModelVenta.get(i).toString());
 			total += comp.getPrecio();
 		}
+		
+		for (int i = 0; i < listModelVentaCombo.size(); i++) {
+			Combo combo = Tienda.getInstance().buscarComboById(listModelVentaCombo.get(i).toString());
+			total += combo.precio();
+		}
+		
 		float descuento = new Float(spnDescuento.getValue().toString()) / 100;
 		spnMonto.setValue(total - (total*descuento));
 	}
 
-	protected void loadCliente(Cliente c) {
+	private void loadCliente(Cliente c) {
 		if (c != null) {
 			
 			txtNombre.setText(c.getNombre());
@@ -444,6 +639,15 @@ public class HacerVenta extends JDialog {
 			btnRegistrar.setEnabled(true);
 		}
 	}
+	
+	private void loadCombosDisponibles() {
+		listModelCombo.removeAllElements();
+		for (Combo c : Tienda.getInstance().getCombos()) {
+			if (Tienda.getInstance().checkCombo(c)) {
+				listModelCombo.addElement(c.getId());
+			}
+		}
+	}
 
 	private void loadComponentesDisponible() {
 		listModelComp.removeAllElements();
@@ -458,11 +662,23 @@ public class HacerVenta extends JDialog {
 		txtCedula.setText("");
 		spnDescuento.setValue(0);
 		cleanReg();
+		
 		listModelVenta.removeAllElements();
+		listModelVentaCombo.removeAllElements();
+		loadCombosDisponibles();
 		loadComponentesDisponible();
+		
 		btnFinalizar.setEnabled(false);
+		btnDerecha.setEnabled(false);
+		btnDerechaCombo.setEnabled(false);
+		btnIzquierda.setEnabled(false);
+		btnIzquierdaCombo.setEnabled(false);
+		btnInfo.setEnabled(false);
+		btnInfoVenta.setEnabled(false);
+		
 		rdbtnSinCredito.setSelected(true);
 		rdbtnCredito.setSelected(false);
+		
 		spnMonto.setValue(0);
 		spnDiasPagar.setValue(0);
 	}
@@ -475,7 +691,7 @@ public class HacerVenta extends JDialog {
 	}
 	
 	// Para modificar el monto cuando se modifica el descuento
-	public JFormattedTextField getTextField(JSpinner spinner) {
+	private JFormattedTextField getTextField(JSpinner spinner) {
 		return ((JSpinner.DefaultEditor)spinner.getEditor()).getTextField(); 
 	}
 }
